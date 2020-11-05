@@ -1,2 +1,2 @@
 # FRIpeout
-Fripeut WebGL version. Currently empty.
+Fripeut WebGL version 0.1.
