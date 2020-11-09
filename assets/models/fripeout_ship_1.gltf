@@ -1,6 +1,6 @@
 {
     "asset" : {
-        "generator" : "Khronos glTF Blender I/O v1.1.45",
+        "generator" : "Khronos glTF Blender I/O v1.3.48",
         "version" : "2.0"
     },
     "scene" : 0,
@@ -8,14 +8,54 @@
         {
             "name" : "Scene",
             "nodes" : [
-                0
+                1,
+                2
             ]
         }
     ],
     "nodes" : [
         {
+            "camera" : 0,
+            "name" : "Camera",
+            "rotation" : [
+                -0.7071067690849304,
+                0,
+                0,
+                0.7071067690849304
+            ]
+        },
+        {
+            "children" : [
+                0
+            ],
+            "name" : "Camera",
+            "rotation" : [
+                0.483536034822464,
+                0.33687159419059753,
+                -0.20870360732078552,
+                0.7804827094078064
+            ],
+            "translation" : [
+                16.159564971923828,
+                9.15712833404541,
+                15.76486873626709
+            ]
+        },
+        {
             "mesh" : 0,
             "name" : "Cube"
+        }
+    ],
+    "cameras" : [
+        {
+            "name" : "Camera",
+            "perspective" : {
+                "aspectRatio" : 1.7777777777777777,
+                "yfov" : 0.39959652046304894,
+                "zfar" : 100,
+                "znear" : 0.10000000149011612
+            },
+            "type" : "perspective"
         }
     ],
     "materials" : [
@@ -26,7 +66,7 @@
                 0,
                 0
             ],
-            "name" : "Material",
+            "name" : "Material.001",
             "pbrMetallicRoughness" : {
                 "baseColorTexture" : {
                     "index" : 0,
@@ -39,7 +79,7 @@
     ],
     "meshes" : [
         {
-            "name" : "Cube",
+            "name" : "Cube.001",
             "primitives" : [
                 {
                     "attributes" : {
@@ -62,15 +102,15 @@
     "images" : [
         {
             "mimeType" : "image/png",
-            "name" : "pixil-frame-0 (6)",
-            "uri" : "pixil-frame-0%206.png"
+            "name" : "pixil-frame-0_big",
+            "uri" : "pixil-frame-0_big.png"
         }
     ],
     "accessors" : [
         {
             "bufferView" : 0,
             "componentType" : 5126,
-            "count" : 3825,
+            "count" : 3761,
             "max" : [
                 3.862459897994995,
                 1.9894208908081055,
@@ -86,13 +126,13 @@
         {
             "bufferView" : 1,
             "componentType" : 5126,
-            "count" : 3825,
+            "count" : 3761,
             "type" : "VEC3"
         },
         {
             "bufferView" : 2,
             "componentType" : 5126,
-            "count" : 3825,
+            "count" : 3761,
             "type" : "VEC2"
         },
         {
@@ -105,23 +145,23 @@
     "bufferViews" : [
         {
             "buffer" : 0,
-            "byteLength" : 45900,
+            "byteLength" : 45132,
             "byteOffset" : 0
         },
         {
             "buffer" : 0,
-            "byteLength" : 45900,
-            "byteOffset" : 45900
+            "byteLength" : 45132,
+            "byteOffset" : 45132
         },
         {
             "buffer" : 0,
-            "byteLength" : 30600,
-            "byteOffset" : 91800
+            "byteLength" : 30088,
+            "byteOffset" : 90264
         },
         {
             "buffer" : 0,
             "byteLength" : 11748,
-            "byteOffset" : 122400
+            "byteOffset" : 120352
         }
     ],
     "samplers" : [
@@ -132,8 +172,8 @@
     ],
     "buffers" : [
         {
-            "byteLength" : 134148,
-            "uri" : "wipeout_ship_4.bin"
+            "byteLength" : 132100,
+            "uri" : "fripeout_ship_1.bin"
         }
     ]
 }

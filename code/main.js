@@ -54,7 +54,7 @@ class Application {
 
     async start() {
         this.loader = new GLTFLoader();
-        await this.loader.load('../assets/monkey/monkey.gltf');
+        await this.loader.load('../assets/models/fripeout_ship_1.gltf');
 
         this.scene = await this.loader.loadScene(this.loader.defaultScene);
         this.camera = await this.loader.loadNode('Camera');
@@ -62,6 +62,10 @@ class Application {
         if (!this.scene || !this.camera) {
             throw new Error('Scene or Camera not present in glTF');
         }
+
+        console.log(this);
+        console.log(this.camera);
+        console.log(this.camera.camera);
 
         if (!this.camera.camera) {
             throw new Error('Camera node does not contain a camera reference');
