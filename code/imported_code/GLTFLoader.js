@@ -290,7 +290,6 @@ export default class GLTFLoader {
             }
         }
         if (gltfSpec.camera !== undefined) {
-            console.log("Has seen camera!");
             options.camera = await this.loadCamera(gltfSpec.camera);
         }
         if (gltfSpec.mesh !== undefined) {
