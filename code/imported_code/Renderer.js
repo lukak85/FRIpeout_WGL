@@ -173,9 +173,12 @@ export default class Renderer {
         return mvpMatrix;
     }
 
-    render(scene, camera) {
+    render(scene, camera, color) {
         const gl = this.gl;
 
+        this.backgroundColor = color;
+
+        gl.clearColor(this.backgroundColor[0] / 255, this.backgroundColor[1] / 255, this.backgroundColor[2] / 255, 1);
         gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 
         const program = this.programs.simple;

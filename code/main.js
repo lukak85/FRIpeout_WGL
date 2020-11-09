@@ -53,8 +53,10 @@ class Application {
     }
 
     async start() {
+        this.color = [255,255,255];
+
         this.loader = new GLTFLoader();
-        await this.loader.load('../assets/models/ships/3/fripeout_ship_3.gltf');
+        await this.loader.load('../assets/models/ships/2/fripeout_ship_2.gltf');
 
         this.scene = await this.loader.loadScene(this.loader.defaultScene);
         this.camera = await this.loader.loadNode('Camera');
@@ -78,7 +80,7 @@ class Application {
 
     render() {
         if (this.renderer) {
-            this.renderer.render(this.scene, this.camera);
+            this.renderer.render(this.scene, this.camera, this.color);
         }
     }
 
@@ -101,6 +103,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const app = new Application(canvas);
     const gui = new dat.GUI();
 
+    gui.addColor(app, 'color');
     /* gui.add(app, 'isLinearFilter')
        .name('Linear filtering')
        .onChange(() => { app.changeFilter(); }); */
