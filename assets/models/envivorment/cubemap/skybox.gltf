@@ -43,7 +43,12 @@
         },
         {
             "mesh" : 0,
-            "name" : "Cube"
+            "name" : "Cube",
+            "scale" : [
+                10,
+                10,
+                10
+            ]
         }
     ],
     "cameras" : [

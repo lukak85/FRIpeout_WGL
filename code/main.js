@@ -1,5 +1,6 @@
 import GLTFLoader from './imported_code/GLTFLoader.js';
 import Renderer from './imported_code/Renderer.js';
+import SpaceshipCamera from './src/SpaceshipCamera.js';
 
 const mat4 = glMatrix.mat4;
 
@@ -54,22 +55,34 @@ class Application {
 
     async start() {
         this.loader = new GLTFLoader();
-        await this.loader.load('../assets/models/ships/2/fripeout_ship_2.gltf');
+        this.loaded = false;
+
+        // Creation of the spaceship and the camera behind it:
+        await this.loader.load('../assets/models/ships/3/fripeout_ship_3.gltf');
 
         this.scene = await this.loader.loadScene(this.loader.defaultScene);
-        this.camera = await this.loader.loadNode('Camera');
 
-        console.log(this.scene);
+        // Object created so that the rotation of both the spaceship and camera
+        // is easier and synchronus:
+        this.spaceshipCamera = new SpaceshipCamera();
+        this.spaceshipCamera.camera = await this.loader.loadNode('Camera');
+        this.spaceshipCamera.spaceship = await this.loader.loadNode('Spaceship');
 
+        this.loaded = true;
+
+        // Camera is a part of spaceship-camera object, but can be reffered to 
+        // in either way from now on:
+        this.camera = this.spaceshipCamera.camera;
+
+        // Creation of floors:
         await this.loader.load('../assets/models/envivorment/floor/floor.gltf');
         let floor = await this.loader.loadScene(this.loader.defaultScene);
         this.scene.addNode(floor.nodes[1]);
 
+        // Creation of skybox:
         await this.loader.load('../assets/models/envivorment/cubemap/skybox.gltf');
         let cubemap = await this.loader.loadScene(this.loader.defaultScene);
         this.scene.addNode(cubemap.nodes[1]);
-
-        console.log(this.scene);
 
         if (!this.scene || !this.camera) {
             throw new Error('Scene or Camera not present in glTF');
@@ -79,6 +92,9 @@ class Application {
             throw new Error('Camera node does not contain a camera reference');
         }
 
+        this.pointerlockchangeHandler = this.pointerlockchangeHandler.bind(this);
+        document.addEventListener('pointerlockchange', this.pointerlockchangeHandler);
+
         this.renderer = new Renderer(this.gl);
         this.renderer.prepareScene(this.scene);
         this.resize();
@@ -86,6 +102,14 @@ class Application {
 
     update() {
         // Noting at the moment
+        const t = this.time = Date.now();
+        const dt = (this.time - this.startTime) * 0.001;
+        this.startTime = this.time;
+
+        if(this.loaded) {
+            this.spaceshipCamera.update(dt);
+        }
+        
     }
 
     render() {
@@ -115,9 +139,9 @@ class Application {
         }
 
         if (document.pointerLockElement === this.canvas) {
-            this.camera.enable();
+            this.spaceshipCamera.enable();
         } else {
-            this.camera.disable();
+            this.spaceshipCamera.disable();
         }
     }
 
