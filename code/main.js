@@ -53,13 +53,23 @@ class Application {
     }
 
     async start() {
-        this.color = [255,255,255];
-
         this.loader = new GLTFLoader();
         await this.loader.load('../assets/models/ships/2/fripeout_ship_2.gltf');
 
         this.scene = await this.loader.loadScene(this.loader.defaultScene);
         this.camera = await this.loader.loadNode('Camera');
+
+        console.log(this.scene);
+
+        await this.loader.load('../assets/models/envivorment/floor/floor.gltf');
+        let floor = await this.loader.loadScene(this.loader.defaultScene);
+        this.scene.addNode(floor.nodes[1]);
+
+        await this.loader.load('../assets/models/envivorment/cubemap/skybox.gltf');
+        let cubemap = await this.loader.loadScene(this.loader.defaultScene);
+        this.scene.addNode(cubemap.nodes[1]);
+
+        console.log(this.scene);
 
         if (!this.scene || !this.camera) {
             throw new Error('Scene or Camera not present in glTF');
@@ -75,12 +85,12 @@ class Application {
     }
 
     update() {
-        // update code (input, animations, AI ...)
+        // Noting at the moment
     }
 
     render() {
         if (this.renderer) {
-            this.renderer.render(this.scene, this.camera, this.color);
+            this.renderer.render(this.scene, this.camera);
         }
     }
 
@@ -95,6 +105,22 @@ class Application {
         }
     }
 
+    enableCamera() {
+        this.canvas.requestPointerLock();
+    }
+
+    pointerlockchangeHandler() {
+        if (!this.camera) {
+            return;
+        }
+
+        if (document.pointerLockElement === this.canvas) {
+            this.camera.enable();
+        } else {
+            this.camera.disable();
+        }
+    }
+
 }
 
 
@@ -103,9 +129,5 @@ document.addEventListener('DOMContentLoaded', () => {
     const app = new Application(canvas);
     const gui = new dat.GUI();
 
-    gui.addColor(app, 'color');
-    /* gui.add(app, 'isLinearFilter')
-       .name('Linear filtering')
-       .onChange(() => { app.changeFilter(); }); */
-
+    gui.add(app, 'enableCamera');
 });
