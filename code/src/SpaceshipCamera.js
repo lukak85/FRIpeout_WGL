@@ -76,8 +76,8 @@ export default class SpaceshipCamera {
         this.spaceship.matrix = this.matrix;
         this.camera.matrix = this.matrix;
 
-        this.camera.updateTransform();
         this.spaceship.updateTransform();
+        this.camera.updateTransform();
 
         this.camera.updateMatrix();
         this.spaceship.updateMatrix();
