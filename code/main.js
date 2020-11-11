@@ -58,7 +58,7 @@ class Application {
         this.loaded = false;
 
         // Creation of the spaceship and the camera behind it:
-        await this.loader.load('../assets/models/ships/1/fripeout_ship_1.gltf');
+        await this.loader.load('../assets/models/ships/2/fripeout_ship_2.gltf');
 
         this.scene = await this.loader.loadScene(this.loader.defaultScene);
 
