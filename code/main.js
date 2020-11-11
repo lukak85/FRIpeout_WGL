@@ -58,7 +58,7 @@ class Application {
         this.loaded = false;
 
         // Creation of the spaceship and the camera behind it:
-        await this.loader.load('../assets/models/ships/3/fripeout_ship_3.gltf');
+        await this.loader.load('../assets/models/ships/3_spaceship/fripeout_ship_3.gltf');
 
         this.scene = await this.loader.loadScene(this.loader.defaultScene);
 
@@ -73,6 +73,8 @@ class Application {
         // Camera is a part of spaceship-camera object, but can be reffered to 
         // in either way from now on:
         this.camera = this.spaceshipCamera.camera;
+
+        console.log(this.spaceshipCamera.spaceship);
 
         // Creation of floors:
         await this.loader.load('../assets/models/envivorment/floor/floor.gltf');

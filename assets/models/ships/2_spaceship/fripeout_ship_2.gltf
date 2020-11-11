@@ -43,13 +43,7 @@
         },
         {
             "mesh" : 0,
-            "name" : "Spaceship",
-            "rotation" : [
-                0,
-                -0.7071068286895752,
-                0,
-                0.707106828689575
-            ]
+            "name" : "Spaceship"
         }
     ],
     "cameras" : [
@@ -116,29 +110,29 @@
         {
             "bufferView" : 0,
             "componentType" : 5126,
-            "count" : 3697,
+            "count" : 3751,
             "max" : [
-                5.017040729522705,
+                5.0170416831970215,
                 1.6593897342681885,
-                9.681197166442871
+                5.8638691902160645
             ],
             "min" : [
-                -5.017040729522705,
+                -5.017039775848389,
                 -0.6730842590332031,
-                -4.360097408294678
+                -8.1774263381958
             ],
             "type" : "VEC3"
         },
         {
             "bufferView" : 1,
             "componentType" : 5126,
-            "count" : 3697,
+            "count" : 3751,
             "type" : "VEC3"
         },
         {
             "bufferView" : 2,
             "componentType" : 5126,
-            "count" : 3697,
+            "count" : 3751,
             "type" : "VEC2"
         },
         {
@@ -151,23 +145,23 @@
     "bufferViews" : [
         {
             "buffer" : 0,
-            "byteLength" : 44364,
+            "byteLength" : 45012,
             "byteOffset" : 0
         },
         {
             "buffer" : 0,
-            "byteLength" : 44364,
-            "byteOffset" : 44364
+            "byteLength" : 45012,
+            "byteOffset" : 45012
         },
         {
             "buffer" : 0,
-            "byteLength" : 29576,
-            "byteOffset" : 88728
+            "byteLength" : 30008,
+            "byteOffset" : 90024
         },
         {
             "buffer" : 0,
             "byteLength" : 11400,
-            "byteOffset" : 118304
+            "byteOffset" : 120032
         }
     ],
     "samplers" : [
@@ -178,7 +172,7 @@
     ],
     "buffers" : [
         {
-            "byteLength" : 129704,
+            "byteLength" : 131432,
             "uri" : "fripeout_ship_2.bin"
         }
     ]
