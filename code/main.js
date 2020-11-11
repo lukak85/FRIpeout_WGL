@@ -91,9 +91,9 @@ class Application {
         this.scene.addNode(floor.nodes[1]);
 
         // Creation of skybox:
-        await this.loader.load('../assets/models/envivorment/cubemap/skybox.gltf');
+        /* await this.loader.load('../assets/models/envivorment/cubemap/skybox.gltf');
         let cubemap = await this.loader.loadScene(this.loader.defaultScene);
-        this.scene.addNode(cubemap.nodes[1]);
+        this.scene.addNode(cubemap.nodes[1]); */
 
         if (!this.scene || !this.camera) {
             throw new Error('Scene or Camera not present in glTF');
