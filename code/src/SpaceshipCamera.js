@@ -5,7 +5,6 @@ const quat = glMatrix.quat;
 export default class SpaceshipCamera {
     constructor() {
         this.spaceship = undefined;
-        this.camera = undefined;
 
         this.matrix = mat4.create();
 
@@ -13,7 +12,7 @@ export default class SpaceshipCamera {
 
         this.velocity = [0,0,0];
         this.mouseSensitivity = 0.0002;
-        this.maxSpeed = 0.3;
+        this.maxSpeed = 1.5;
         this.friction = 0.2;
         this.acceleration = 2;
 
@@ -21,20 +20,25 @@ export default class SpaceshipCamera {
         this.keydownHandler = this.keydownHandler.bind(this);
         this.keyupHandler = this.keyupHandler.bind(this);
         this.keys = {};
+
+        // --------------------------------------------------------
+
+        this.angle = 0;
+        this.translationMatrix = mat4.create();
+        this.rotationSpeed = 2;
     }
 
     // ----------------------------------------------------------
     //          FUNCTIONS FOR MOVING THE OBJECT/NODE
     // ----------------------------------------------------------
 
-    update(dt) {  
-        const c = this.camera;
+    update(dt) {
         const s = this.spaceship;
 
         const forward = vec3.set(vec3.create(),
-            -Math.sin(c.rotation[1]), 0, -Math.cos(c.rotation[1]));
+            -Math.sin(this.angle), 0, -Math.cos(this.angle));
         const right = vec3.set(vec3.create(),
-            Math.cos(c.rotation[1]), 0, -Math.sin(c.rotation[1]));
+            Math.cos(this.angle), 0, -Math.sin(this.angle));
         
         // 1: add movement acceleration
         let acc = vec3.create();
@@ -45,10 +49,10 @@ export default class SpaceshipCamera {
             vec3.sub(acc, acc, forward);
         }
         if (this.keys['KeyD']) {
-            vec3.add(acc, acc, right);
+            this.rotate(dt, 1);
         }
         if (this.keys['KeyA']) {
-            vec3.sub(acc, acc, right);
+            this.rotate(dt, -1);
         }
 
         // 2: update velocity
@@ -56,9 +60,7 @@ export default class SpaceshipCamera {
 
         // 3: if no movement, apply friction
         if (!this.keys['KeyW'] &&
-            !this.keys['KeyS'] &&
-            !this.keys['KeyD'] &&
-            !this.keys['KeyA'])
+            !this.keys['KeyS'])
         {
             vec3.scale(this.velocity, this.velocity, 1 - this.friction);
         }
@@ -70,16 +72,17 @@ export default class SpaceshipCamera {
         }
 
         let tempMatrix = mat4.create();
+
         mat4.fromTranslation(tempMatrix, this.velocity);
-        mat4.multiply(this.matrix, tempMatrix, this.matrix);
+        mat4.multiply(this.translationMatrix, tempMatrix, this.translationMatrix);
+
+        mat4.fromYRotation(tempMatrix, this.angle);
+        mat4.multiply(this.matrix, this.translationMatrix, tempMatrix);
 
         this.spaceship.matrix = this.matrix;
-        this.camera.matrix = this.matrix;
 
         this.spaceship.updateTransform();
-        this.camera.updateTransform();
 
-        this.camera.updateMatrix();
         this.spaceship.updateMatrix();
     }
 
@@ -99,27 +102,19 @@ export default class SpaceshipCamera {
         }
     }
 
-    mousemoveHandler(e) {
-        // Currently don't really need mouse rotation:
-        /* const dx = e.movementX;
-        const dy = e.movementY;
-        const c = this.camera;
+    rotate(dt, dir) {
+        const s = this.spaceship;
 
-        c.rotation[0] -= dy * c.mouseSensitivity;
-        c.rotation[1] -= dx * c.mouseSensitivity;
+        this.angle -= dir * dt * this.rotationSpeed;
 
         const pi = Math.PI;
         const twopi = pi * 2;
-        const halfpi = pi / 2;
 
-        if (c.rotation[0] > halfpi) {
-            c.rotation[0] = halfpi;
-        }
-        if (c.rotation[0] < -halfpi) {
-            c.rotation[0] = -halfpi;
-        }
+        // s.rotation[1] = ((s.rotation[1] % twopi) + twopi) % twopi;
+    }
 
-        c.rotation[1] = ((c.rotation[1] % twopi) + twopi) % twopi; */
+    mousemoveHandler(e) {
+        // Nothing so far
     }
 
     keydownHandler(e) {

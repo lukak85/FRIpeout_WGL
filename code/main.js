@@ -64,17 +64,26 @@ class Application {
 
         // Object created so that the rotation of both the spaceship and camera
         // is easier and synchronus:
-        this.spaceshipCamera = new SpaceshipCamera();
-        this.spaceshipCamera.camera = await this.loader.loadNode('Camera');
-        this.spaceshipCamera.spaceship = await this.loader.loadNode('Spaceship');
+        this.currentSpaceship = new SpaceshipCamera();
+        this.currentSpaceship.spaceship = await this.loader.loadNode('Spaceship');
+        var camera = await this.loader.loadNode('Camera');
+
+        this.currentSpaceship.spaceship.addChild(camera);
 
         this.loaded = true;
 
         // Camera is a part of spaceship-camera object, but can be reffered to 
         // in either way from now on:
-        this.camera = this.spaceshipCamera.camera;
+        this.camera = this.currentSpaceship.spaceship.children[0];
 
-        console.log(this.spaceshipCamera.spaceship);
+        // Create another spaceship:
+        await this.loader.load('../assets/models/ships/2_spaceship/fripeout_ship_2.gltf');
+        let spaceship = await this.loader.loadScene(this.loader.defaultScene);
+        this.scene.addNode(spaceship.nodes[1]);
+
+        /* console.log(this.scene.nodes[2]);
+        this.scene.nodes[2].translation[1] = 10;
+        console.log(this.scene.nodes[2]); */
 
         // Creation of floors:
         await this.loader.load('../assets/models/envivorment/floor/floor.gltf');
@@ -109,7 +118,7 @@ class Application {
         this.startTime = this.time;
 
         if(this.loaded) {
-            this.spaceshipCamera.update(dt);
+            this.currentSpaceship.update(dt);
         }
         
     }
@@ -141,9 +150,9 @@ class Application {
         }
 
         if (document.pointerLockElement === this.canvas) {
-            this.spaceshipCamera.enable();
+            this.currentSpaceship.enable();
         } else {
-            this.spaceshipCamera.disable();
+            this.currentSpaceship.disable();
         }
     }
 
