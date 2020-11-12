@@ -4,6 +4,7 @@ import Light from './Light.js';
 
 const mat4 = glMatrix.mat4;
 const vec3 = glMatrix.vec3;
+const quat = glMatrix.quat;
 
 // This class prepares all assets for use with WebGL
 // and takes care of rendering.
@@ -213,14 +214,22 @@ export default class Renderer {
 
         let lightCounter = 0;
 
-        console.log(camera.matrix);
-
         scene.traverse(
             (node) => {
                 matrixStack.push(mat4.clone(matrix));
                 mat4.mul(matrix, matrix, node.matrix);
                 if(node.mesh && !(node instanceof Light)) {
                     gl.uniformMatrix4fv(program.uniforms.uViewModel, false, matrix);
+
+                    /* console.log(node.matrix); */
+                    let rotated = quat.create();
+                    mat4.getRotation(rotated, node.matrix);
+                    /* let pos = mat4.getTranslation(node.matrix); */
+                    let rotMatrix = mat4.create();
+                    mat4.fromRotationTranslation(rotMatrix, rotated, [0,0,0]);
+
+                    gl.uniformMatrix4fv(program.uniforms.uRotateNormals, false, rotMatrix);
+
                     for (const primitive of node.mesh.primitives) {
                         this.renderPrimitive(primitive);
                     }
@@ -234,12 +243,20 @@ export default class Renderer {
                     color = vec3.clone(node.specularColor);
                     vec3.scale(color, color, 1.0 / 255.0);
                     gl.uniform3fv(program.uniforms['uSpecularColor[' + lightCounter + ']'], color);
-
+                    
                     let position = [0,0,0];
-                    position[0] = node.translation[0];
-                    position[1] = node.translation[1];
-                    position[2] = node.translation[2];
-                    /* mat4.getTranslation(position, node.matrix); */
+                    mat4.getTranslation(position, node.matrix);
+
+                    /* let tempMatrix = mat4.create();
+                    tempMatrix = this.getViewMatrix(camera);
+                    mat4.invert(tempMatrix, tempMatrix);
+
+                    mat4.mul(tempMatrix, node.matrix, tempMatrix);
+
+                    mat4.getTranslation(position, tempMatrix);
+
+                    console.log(position); */
+
 
                     gl.uniform3fv(program.uniforms['uLightPosition[' + lightCounter + ']'], position);
                     gl.uniform1f(program.uniforms['uShininess[' + lightCounter + ']'], node.shininess);

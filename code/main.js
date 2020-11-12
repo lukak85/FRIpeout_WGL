@@ -13,6 +13,10 @@ class Application {
         this._initGL();
         this.start();
 
+        this.LightX = 0;
+        this.LightY = 5;
+        this.LightZ = 0;
+
         requestAnimationFrame(this._update);
     }
 
@@ -81,9 +85,7 @@ class Application {
         let spaceship = await this.loader.loadScene(this.loader.defaultScene);
         this.scene.addNode(spaceship.nodes[1]);
 
-        /* console.log(this.scene.nodes[2]);
-        this.scene.nodes[2].translation[1] = 10;
-        console.log(this.scene.nodes[2]); */
+        this.scene.nodes[2].translation[2] = 10;
 
         // Creation of floors:
         await this.loader.load('../assets/models/envivorment/floor/floor.gltf');
@@ -97,10 +99,13 @@ class Application {
 
         // Just a simple light so we can see the scene:
         let light = new Light();
-        light.translation[0] = 0;
-        light.translation[1] = 15;
-        light.translation[2] = 0;
+        light.translation[0] = this.LightX;
+        light.translation[1] = this.LightY;
+        light.translation[2] = this.LightZ;
         this.scene.addNode(light);
+        this.lightMove = light;
+
+        mat4.fromTranslation(this.lightMove.matrix, this.lightMove.translation);
 
         if (!this.scene || !this.camera) {
             throw new Error('Scene or Camera not present in glTF');
@@ -127,7 +132,18 @@ class Application {
         if(this.loaded) {
             this.currentSpaceship.update(dt);
         }
-        
+
+        if(this.lightMove) {
+            this.updateLight();
+        }
+    }
+
+    updateLight() {
+        this.lightMove.translation[0] = this.LightX;
+        this.lightMove.translation[1] = this.LightY;
+        this.lightMove.translation[2] = this.LightZ;
+
+        mat4.fromTranslation(this.lightMove.matrix, this.lightMove.translation);
     }
 
     render() {
@@ -171,5 +187,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const app = new Application(canvas);
     const gui = new dat.GUI();
 
+    gui.add(app, 'LightX', -50, 50);
+    gui.add(app, 'LightY', 0, 10);
+    gui.add(app, 'LightZ', -50, 50);
     gui.add(app, 'enableCamera');
 });

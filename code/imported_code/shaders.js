@@ -6,6 +6,7 @@ layout (location = 2) in vec2 aTexCoord;
 
 uniform mat4 uViewModel;
 uniform mat4 uProjection;
+uniform mat4 uRotateNormals;
 
 out vec3 vVertexPosition;
 out vec3 vNormal;
@@ -13,7 +14,7 @@ out vec2 vTexCoord;
 
 void main() {
     vVertexPosition = (uViewModel * vec4(aPosition)).xyz;
-    vNormal = aNormal;
+    vNormal = mat3(uRotateNormals) * aNormal;
     vTexCoord = aTexCoord;
     gl_Position = uProjection * vec4(vVertexPosition, 1);
 }
