@@ -1,7 +1,7 @@
 import GLTFLoader from './imported_code/GLTFLoader.js';
 import Renderer from './imported_code/Renderer.js';
 import SpaceshipCamera from './src/SpaceshipCamera.js';
-
+import Light from './imported_code/Light.js'
 const mat4 = glMatrix.mat4;
 
 class Application {
@@ -94,6 +94,13 @@ class Application {
         /* await this.loader.load('../assets/models/envivorment/cubemap/skybox.gltf');
         let cubemap = await this.loader.loadScene(this.loader.defaultScene);
         this.scene.addNode(cubemap.nodes[1]); */
+
+        // Just a simple light so we can see the scene:
+        let light = new Light();
+        light.translation[0] = 0;
+        light.translation[1] = 15;
+        light.translation[2] = 0;
+        this.scene.addNode(light);
 
         if (!this.scene || !this.camera) {
             throw new Error('Scene or Camera not present in glTF');

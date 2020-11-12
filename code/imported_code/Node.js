@@ -67,5 +67,5 @@ export default class Node {
             children: this.children.map(child => child.clone()),
         });
     }
-
+    
 }

@@ -1,7 +1,9 @@
 import * as WebGL from './WebGL.js';
 import shaders from './shaders.js';
+import Light from './Light.js';
 
 const mat4 = glMatrix.mat4;
+const vec3 = glMatrix.vec3;
 
 // This class prepares all assets for use with WebGL
 // and takes care of rendering.
@@ -16,6 +18,12 @@ export default class Renderer {
         gl.clearColor(0.552, 0.980, 1, 1);
         gl.enable(gl.DEPTH_TEST);
         gl.enable(gl.CULL_FACE);
+
+        this.defaultTexture = WebGL.createTexture(gl, {
+            data   : new Uint8Array([255, 255, 255, 255]),
+            width  : 1,
+            height : 1,
+        });
     }
 
     prepareBufferView(bufferView) {
@@ -113,7 +121,8 @@ export default class Renderer {
         // this is an application-scoped convention, matching the shader
         const attributeNameToIndexMap = {
             POSITION   : 0,
-            TEXCOORD_0 : 1,
+            NORMAL     : 1,
+            TEXCOORD_0 : 2,
         };
 
         for (const name in primitive.attributes) {
@@ -173,6 +182,18 @@ export default class Renderer {
         return mvpMatrix;
     }
 
+    getViewMatrix(camera) {
+        const viewMatrix = mat4.clone(camera.matrix);
+        let parent = camera.parent;
+        while (parent) {
+            mat4.mul(viewMatrix, parent.matrix, viewMatrix);
+            parent = parent.parent;
+        }
+        /* mat4.invert(viewMatrix, viewMatrix); */
+        return viewMatrix;
+    }
+
+
     render(scene, camera) {
         const gl = this.gl;
 
@@ -182,29 +203,54 @@ export default class Renderer {
         gl.useProgram(program.program);
         gl.uniform1i(program.uniforms.uTexture, 0);
 
-        const mvpMatrix = this.getViewProjectionMatrix(camera);
-        for (const node of scene.nodes) {
-            this.renderNode(node, mvpMatrix);
-        }
-    }
+        let matrix = mat4.create();
+        let matrixStack = [];
 
-    renderNode(node, mvpMatrix) {
-        const gl = this.gl;
+        const viewMatrix = this.getViewMatrix(camera);
+        mat4.invert(viewMatrix, viewMatrix);
+        mat4.copy(matrix, viewMatrix);
+        gl.uniformMatrix4fv(program.uniforms.uProjection, false, camera.camera.matrix);
 
-        mvpMatrix = mat4.clone(mvpMatrix);
-        mat4.mul(mvpMatrix, mvpMatrix, node.matrix);
+        let lightCounter = 0;
 
-        if (node.mesh) {
-            const program = this.programs.simple;
-            gl.uniformMatrix4fv(program.uniforms.uMvpMatrix, false, mvpMatrix);
-            for (const primitive of node.mesh.primitives) {
-                this.renderPrimitive(primitive);
+        console.log(camera.matrix);
+
+        scene.traverse(
+            (node) => {
+                matrixStack.push(mat4.clone(matrix));
+                mat4.mul(matrix, matrix, node.matrix);
+                if(node.mesh && !(node instanceof Light)) {
+                    gl.uniformMatrix4fv(program.uniforms.uViewModel, false, matrix);
+                    for (const primitive of node.mesh.primitives) {
+                        this.renderPrimitive(primitive);
+                    }
+                } else if (node instanceof Light) {
+                    let color = vec3.clone(node.ambientColor);
+                    vec3.scale(color, color, 1.0 / 255.0);
+                    gl.uniform3fv(program.uniforms['uAmbientColor[' + lightCounter + ']'], color);
+                    color = vec3.clone(node.diffuseColor);
+                    vec3.scale(color, color, 1.0 / 255.0);
+                    gl.uniform3fv(program.uniforms['uDiffuseColor[' + lightCounter + ']'], color);
+                    color = vec3.clone(node.specularColor);
+                    vec3.scale(color, color, 1.0 / 255.0);
+                    gl.uniform3fv(program.uniforms['uSpecularColor[' + lightCounter + ']'], color);
+
+                    let position = [0,0,0];
+                    position[0] = node.translation[0];
+                    position[1] = node.translation[1];
+                    position[2] = node.translation[2];
+                    /* mat4.getTranslation(position, node.matrix); */
+
+                    gl.uniform3fv(program.uniforms['uLightPosition[' + lightCounter + ']'], position);
+                    gl.uniform1f(program.uniforms['uShininess[' + lightCounter + ']'], node.shininess);
+                    gl.uniform3fv(program.uniforms['uLightAttenuation[' + lightCounter + ']'], node.attenuatuion);
+                    lightCounter++;
+                }
+            },
+            (node) => {
+                matrix = matrixStack.pop();
             }
-        }
-
-        for (const child of node.children) {
-            this.renderNode(child, mvpMatrix);
-        }
+        );
     }
 
     renderPrimitive(primitive) {
