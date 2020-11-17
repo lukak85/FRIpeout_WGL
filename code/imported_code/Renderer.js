@@ -214,6 +214,11 @@ export default class Renderer {
 
         let lightCounter = 0;
 
+        let fogColour = vec3.create();
+        fogColour = vec3.fromValues(0.552, 0.980, 1);
+
+        gl.uniform3fv(program.uniforms.fogColour, fogColour);
+
         scene.traverse(
             (node) => {
                 matrixStack.push(mat4.clone(matrix));

@@ -12,11 +12,21 @@ out vec3 vVertexPosition;
 out vec3 vNormal;
 out vec2 vTexCoord;
 
+out float fogVisibility;
+
+const float fogDensity = 0.007;
+const float fogGradient = 1.5;
+
 void main() {
     vVertexPosition = (uViewModel * vec4(aPosition)).xyz;
     vNormal = mat3(uRotateNormals) * aNormal;
     vTexCoord = aTexCoord;
     gl_Position = uProjection * vec4(vVertexPosition, 1);
+
+    // For the fog:
+    float distance = length(vVertexPosition.xyz) * 0.5;
+    fogVisibility = exp(-pow((distance * fogDensity), fogGradient));
+    fogVisibility = clamp(fogVisibility, 0.0, 1.0);
 }
 `;
 
@@ -37,9 +47,13 @@ uniform float uShininess[NUMBER_OF_LIGHTS];
 uniform vec3 uLightPosition[NUMBER_OF_LIGHTS];
 uniform vec3 uLightAttenuation[NUMBER_OF_LIGHTS];
 
+uniform vec3 fogColour;
+
 in vec3 vVertexPosition;
 in vec3 vNormal;
 in vec2 vTexCoord;
+
+in float fogVisibility;
 
 out vec4 oColor;
 
@@ -71,6 +85,8 @@ void main() {
     // oColor = vec4(light, 1.0);
     // oColor = texture(uTexture, vTexCoord);
     // oColor = vec4(0.0, 0.0, 0.0, 1.0);
+
+    oColor = mix(vec4(fogColour, 1.0), oColor, fogVisibility);
 }
 `;
 
