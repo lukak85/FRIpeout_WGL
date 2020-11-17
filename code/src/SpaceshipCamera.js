@@ -26,6 +26,14 @@ export default class SpaceshipCamera {
         this.angle = 0;
         this.translationMatrix = mat4.create();
         this.rotationSpeed = 2;
+
+        // --------------------------------------------------------
+
+        this.cameraRotation = 0;
+        this.maxCameraAngle = 0.25;
+
+        this.firstLoop = true;
+        this.initCameraMatrix = mat4.create();
     }
 
     // ----------------------------------------------------------
@@ -34,6 +42,7 @@ export default class SpaceshipCamera {
 
     update(dt) {
         const s = this.spaceship;
+        const cam = this.spaceship.children[0];
 
         const forward = vec3.set(vec3.create(),
             -Math.sin(this.angle), 0, -Math.cos(this.angle));
@@ -80,6 +89,21 @@ export default class SpaceshipCamera {
         this.spaceship.updateTransform();
 
         this.spaceship.updateMatrix();
+
+        //------------------------------------------------
+        // Camera rotation so it's not completely static:
+        //------------------------------------------------
+        if(this.firstLoop && this.spaceship) {
+            this.firstLoop = false;
+            mat4.copy(this.initCameraMatrix, cam.matrix);
+        }
+
+        let cameraMatrix = mat4.create();
+        this.cameraCenter(dt);
+
+        mat4.fromRotation(cameraMatrix, this.cameraRotation, [0,1,0]);
+
+        mat4.multiply(cam.matrix, cameraMatrix, this.initCameraMatrix);
     }
 
     enable() {
@@ -106,7 +130,37 @@ export default class SpaceshipCamera {
         const pi = Math.PI;
         const twopi = pi * 2;
 
+        // Camera rotation:
+        this.cameraRotation += dir * dt * this.rotationSpeed;
+        if(this.cameraRotation > this.maxCameraAngle - 0.01) {
+            this.cameraRotation = this.maxCameraAngle;
+        }
+        else if(this.cameraRotation < -this.maxCameraAngle + 0.01) {
+            this.cameraRotation = -this.maxCameraAngle;
+        }
+        
+        // this.cameraRotation = dir * Math.min(Math.abs(this.maxCameraAngle), Math.abs(this.cameraRotation));
+
         // s.rotation[1] = ((s.rotation[1] % twopi) + twopi) % twopi;
+    }
+
+    cameraCenter(dt) {
+        if(this.cameraRotation > 0) {
+            if(this.cameraRotation < 0.005) {
+                this.cameraRotation = 0;
+            }
+            else {
+                this.cameraRotation -= 1.0 * dt;
+            }
+        }
+        else if(this.cameraRotation < 0) {
+            if(this.cameraRotation > -0.005) {
+                this.cameraRotation = 0;
+            }
+            else {
+                this.cameraRotation += 1.0 * dt;
+            }
+        }
     }
 
     mousemoveHandler(e) {
