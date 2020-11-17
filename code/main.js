@@ -192,3 +192,45 @@ document.addEventListener('DOMContentLoaded', () => {
     gui.add(app, 'LightZ', -500, 500);
     gui.add(app, 'enableCamera');
 });
+
+
+//Keys detect
+document.onkeydown = function(e) { 
+    switch (e.keyCode) { 
+        //Right shift key -special ability (optional)
+        case 16:
+            //Function call /TODO
+            break;
+
+        //Space key -handbrake (optional)
+        case 32:
+            //Function call /TODO
+            break;
+
+        //Left arrow key -steerleft
+        case 37: 
+            //Function call /TODO
+            break; 
+
+        //Up arrow key -gas
+        case 38: 
+            //Function call /TODO 
+            break; 
+
+        //Right arrow key -steer right
+        case 39: 
+            //Function call /TODO
+            break; 
+
+        //Down arrow key -break
+        case 40: 
+            //Function call /TODO
+            break; 
+
+        //N key -nitrous 
+        case 78:
+            //Function call /TODO
+            break;
+    } 
+}; 
+
