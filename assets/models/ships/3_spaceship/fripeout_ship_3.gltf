@@ -18,14 +18,14 @@
             "camera" : 0,
             "name" : "Camera",
             "rotation" : [
+                -0.063,
                 0,
                 0,
-                0,
-                1
+                0.998
             ],
             "translation" : [
                 0,
-                2,
+                5,
                 40
             ]
         },

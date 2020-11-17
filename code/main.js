@@ -13,9 +13,9 @@ class Application {
         this._initGL();
         this.start();
 
-        this.LightX = 0;
-        this.LightY = 5;
-        this.LightZ = 0;
+        this.LightX = 500;
+        this.LightY = 1800;
+        this.LightZ = 500;
 
         requestAnimationFrame(this._update);
     }
@@ -187,8 +187,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const app = new Application(canvas);
     const gui = new dat.GUI();
 
-    gui.add(app, 'LightX', -50, 50);
-    gui.add(app, 'LightY', 0, 10);
-    gui.add(app, 'LightZ', -50, 50);
+    gui.add(app, 'LightX', -500, 500);
+    gui.add(app, 'LightY', 1500, 3000);
+    gui.add(app, 'LightZ', -500, 500);
     gui.add(app, 'enableCamera');
 });

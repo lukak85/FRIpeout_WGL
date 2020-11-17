@@ -12,9 +12,9 @@ export default class SpaceshipCamera {
 
         this.velocity = [0,0,0];
         this.mouseSensitivity = 0.0002;
-        this.maxSpeed = 15;
-        this.friction = 0.2;
-        this.acceleration = 20;
+        this.maxSpeed = 45;
+        this.friction = 0.15;
+        this.acceleration = 50;
 
         this.mousemoveHandler = this.mousemoveHandler.bind(this);
         this.keydownHandler = this.keydownHandler.bind(this);
