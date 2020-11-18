@@ -62,8 +62,16 @@ class Application {
         this.loader = new GLTFLoader();
         this.loaded = false;
 
+        let spaceshipNumber = window.location.hash.substring(1);
+        console.log(spaceshipNumber);
+
+        // Just a little fix because the numbering of the files and the main menu numbering is different.
+        if(spaceshipNumber == 0) {
+            spaceshipNumber = 3;
+        }
+
         // Creation of the spaceship and the camera behind it:
-        await this.loader.load('../assets/models/ships/3_spaceship/fripeout_ship_3.gltf');
+        await this.loader.load('../assets/models/ships/' + spaceshipNumber + '_spaceship/fripeout_ship_' + spaceshipNumber + '.gltf');
 
         this.scene = await this.loader.loadScene(this.loader.defaultScene);
 

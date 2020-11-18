@@ -229,16 +229,8 @@ document.addEventListener('keydown', (e) => {
     console.log(e.key);
     if(e.key == "Enter") {
         if(vehicleSelection == true) {
-            window.location.href=("./game.html");
+            window.location.href = "./game.html" + '#' + currentApp.currentSpaceshipIndex;
         }
-    }
-    if(!vehicleSelection) {
-        currentApp.selectVehicle();
-        vehicleSelection = true;
-
-        document.getElementById('keypress').style.visibility = "hidden";
-        document.getElementById('vehicleselect').style.visibility = "visible";
-
     }
     if(vehicleSelection) {
         if(e.key == "ArrowRight") {
@@ -247,5 +239,12 @@ document.addEventListener('keydown', (e) => {
         else if(e.key == "ArrowLeft") {
             currentApp.switchVehicle(-1);
         }
+    }
+    if(!vehicleSelection) {
+        currentApp.selectVehicle();
+        vehicleSelection = true;
+
+        document.getElementById('keypress').style.visibility = "hidden";
+        document.getElementById('vehicleselect').style.visibility = "visible";
     }
 });
