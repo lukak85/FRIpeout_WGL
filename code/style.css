@@ -19,9 +19,28 @@ body, html {
 }
 
 .overlay {
-    position: fixed;
-    left: 20px;
-    top: 20px;
+    position: absolute;
+    bottom: 0px;
+}
+
+#keypress {
+    text-align: center;
+    position: absolute;
+    bottom: 30px;
+    width: 100%;
+    font-size: 3em;
+    font-style: italic;
+    visibility: visible;
+}
+
+#vehicleselect {
+    text-align: center;
+    position: absolute;
+    top: 30px;
+    width: 100%;
+    font-size: 3em;
+    font-style: italic;
+    visibility: hidden;
 }
 
 a.back {

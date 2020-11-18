@@ -2,6 +2,7 @@ import GLTFLoader from './imported_code/GLTFLoader.js';
 import Renderer from './imported_code/Renderer.js';
 import SpaceshipCamera from './src/SpaceshipCamera.js';
 import Light from './imported_code/Light.js'
+
 const mat4 = glMatrix.mat4;
 
 class Application {
@@ -83,6 +84,9 @@ class Application {
         // Create another spaceship:
         await this.loader.load('../assets/models/ships/2_spaceship/fripeout_ship_2.gltf');
         let spaceship = await this.loader.loadScene(this.loader.defaultScene);
+        let spaceshipMove = spaceship.nodes[1].translation;
+        spaceshipMove[0] = -15;
+        mat4.fromTranslation(spaceship.nodes[1].matrix, spaceshipMove);
         this.scene.addNode(spaceship.nodes[1]);
 
         this.scene.nodes[2].translation[2] = 10;

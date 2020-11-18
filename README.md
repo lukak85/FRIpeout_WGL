@@ -1,5 +1,5 @@
 # FRIpeout
-Fripeut WebGL version 0.3.
+Fripeut WebGL version 0.4.
 
 Currently working:
 * Object spawning
@@ -7,9 +7,9 @@ Currently working:
 * Basic lighting
 * Fog (although it needs some tweaking)
 * Non-static amera attached to the object (delayed movement to behind the player)
+* Menu with vehicle selection (the actual vehicle selection yet to be implemented)
 
 To add/wishlist:
 * Collision detection
 * Motion blur
-* Menu with vehicle selection
 * UI
