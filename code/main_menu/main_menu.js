@@ -205,16 +205,18 @@ class MMApplication {
 
     switchVehicle(change) {
         if(this.currentSpaceshipIndex + change < this.spaceshipList.length && this.currentSpaceshipIndex + change >= 0) {
-            let tempMatrix = mat4.create();
+            let tempMatrix = mat4.clone(this.currentSpaceship.matrix);
+            let currentRotationMatrix = mat4.clone(this.currentSpaceship.matrix);
             mat4.fromScaling(tempMatrix, [1/256,1/256,1/256]);
             mat4.mul(this.currentSpaceship.matrix, tempMatrix, this.currentSpaceship.matrix);
 
             this.currentSpaceshipIndex += change;
             this.currentSpaceship = this.spaceshipList[this.currentSpaceshipIndex];
 
-            mat4.fromScaling(tempMatrix, [256,256,256]);
-            mat4.mul(this.currentSpaceship.matrix, tempMatrix, this.currentSpaceship.matrix);
-            mat4.fromRotation(this.currentSpaceship.matrix, 3, [0,1,0]);
+            //mat4.fromScaling(tempMatrix, [256,256,256]);
+            //mat4.mul(this.currentSpaceship.matrix, tempMatrix, this.currentSpaceship.matrix);
+            //mat4.fromRotation(this.currentSpaceship.matrix, 3, [0,1,0]);
+            this.currentSpaceship.matrix = currentRotationMatrix;
         }
     }
 
