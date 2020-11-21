@@ -14,7 +14,7 @@ export default class SpaceshipCamera {
         this.mouseSensitivity = 0.0002;
         this.maxSpeed = 45;
         this.friction = 0.15;
-        this.acceleration = 50;
+        this.acceleration = 20;
 
         this.mousemoveHandler = this.mousemoveHandler.bind(this);
         this.keydownHandler = this.keydownHandler.bind(this);
@@ -77,16 +77,18 @@ export default class SpaceshipCamera {
         }
 
         // 2: update velocity
-        vec3.scaleAndAdd(this.velocity, this.velocity, acc, dt * this.acceleration);
+        vec3.scaleAndAdd(this.velocity, this.velocity, acc,  dt * this.acceleration);
 
         // 3: if no movement, apply friction
         vec3.scale(this.velocity, this.velocity, 1 - this.friction);
+
 
         // 4: limit speed
         const len = vec3.len(this.velocity);
         if (len > this.maxSpeed) {
             vec3.scale(this.velocity, this.velocity, this.maxSpeed / len);
         }
+
 
         let tempMatrix = mat4.create();
 
