@@ -3,8 +3,9 @@ import Renderer from './imported_code/Renderer.js';
 import SpaceshipCamera from './src/SpaceshipCamera.js';
 import Light from './imported_code/Light.js'
 
+const vec3 = glMatrix.vec3;
 const mat4 = glMatrix.mat4;
-
+let isPaused = false;
 class Application {
 
     constructor(canvas) {
@@ -39,6 +40,7 @@ class Application {
         this._resize();
         this.update();
         this.render();
+
         requestAnimationFrame(this._update);
     }
 
@@ -76,7 +78,7 @@ class Application {
         this.scene = await this.loader.loadScene(this.loader.defaultScene);
 
         // Object created so that the rotation of both the spaceship and camera
-        // is easier and synchronus:
+        // is easier and synchronous:
         this.currentSpaceship = new SpaceshipCamera();
         this.currentSpaceship.spaceship = await this.loader.loadNode('Spaceship');
         var camera = await this.loader.loadNode('Camera');
@@ -140,14 +142,24 @@ class Application {
         this.resize();
     }
 
+    getSpeed(vector){
+        let curSpeed = Math.sqrt(vector[0]* vector[0] + vector[1]* vector[1] + vector[2]* vector[2]);
+        return curSpeed > 0.05 ? Math.round(curSpeed*100) : 0;
+    }
+
     update() {
         // Noting at the moment
+        if(isPaused){
+            this.startTime = Date.now();;
+            return;
+        }
         const t = this.time = Date.now();
         const dt = (this.time - this.startTime) * 0.001;
         this.startTime = this.time;
 
         if(this.loaded) {
             this.currentSpaceship.update(dt);
+            document.getElementById('speed').innerText = "Current speed: " +  this.getSpeed(this.currentSpaceship.velocity) + " u/s";
         }
 
         if(this.lightMove) {
@@ -179,6 +191,10 @@ class Application {
             this.camera.camera.updateMatrix();
         }
     }
+    static pause(){
+        isPaused = !isPaused;
+        this.startTime = this.time = Date.now();
+    }
 
     enableCamera() {
         this.canvas.requestPointerLock();
@@ -196,7 +212,9 @@ class Application {
         }
     }
 
+
 }
+
 
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -247,6 +265,12 @@ document.onkeydown = function(e) {
         //N key -nitrous 
         case 78:
             //Function call /TODO
+            break;
+        case 80:
+            //Function call /TODO
+
+            Application.pause();
+            document.getElementById('paused').style.visibility = isPaused ? "visible" : "hidden";
             break;
     } 
 }; 
