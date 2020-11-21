@@ -120,7 +120,7 @@ export default class SpaceshipCamera {
         //-----------------------
         // Play spaceship sounds:
         //-----------------------
-        if(this.keys['KeyW'] || this.keys['KeyS']) {
+        /* if(this.keys['KeyW'] || this.keys['KeyS']) {
             this.spaceshipAudio.pause();
             this.spaceshipAudio.currentTime = 0;
             this.drivingAudio.play();
@@ -130,6 +130,25 @@ export default class SpaceshipCamera {
             }
         }
         else if(!(this.keys['KeyW'] || this.keys['KeyS'])) {
+            this.drivingAudio.pause();
+            this.drivingAudio.currentTime = 0;
+            this.spaceshipAudio.play();
+
+            if(this.spaceshipAudio.currentTime > 3) {
+                this.spaceshipAudio.currentTime = 0;
+            }
+        } */
+
+        if(Math.abs(this.velocity[0]) > 0.01 || Math.abs(this.velocity[1]) > 0.01) {
+            this.spaceshipAudio.pause();
+            this.spaceshipAudio.currentTime = 0;
+            this.drivingAudio.play();
+
+            if(this.drivingAudio.currentTime > 4) {
+                this.drivingAudio.currentTime = 0;
+            }
+        }
+        else {
             this.drivingAudio.pause();
             this.drivingAudio.currentTime = 0;
             this.spaceshipAudio.play();

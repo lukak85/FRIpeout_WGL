@@ -1,6 +1,7 @@
 import GLTFLoader from './imported_code/GLTFLoader.js';
 import Renderer from './imported_code/Renderer.js';
 import SpaceshipCamera from './src/SpaceshipCamera.js';
+import Physics from './src/Physics.js';
 import Light from './imported_code/Light.js'
 
 const mat4 = glMatrix.mat4;
@@ -100,7 +101,7 @@ class Application {
         this.scene.nodes[2].translation[2] = 10;
 
         // Creation of racetrack:
-        await this.loader.load('../assets/models/envivorment/racetrack/race_track.gltf');
+        await this.loader.load('../assets/models/envivorment/racetrack/2/race_track_2.gltf');
         let racetrack = await this.loader.loadScene(this.loader.defaultScene);
         this.scene.addNode(racetrack.nodes[0]);
 
@@ -138,6 +139,11 @@ class Application {
         this.renderer = new Renderer(this.gl);
         this.renderer.prepareScene(this.scene);
         this.resize();
+
+        let spaceshipCollision = this.createCollisionObject()
+        this.currentSpaceship.spaceship.addChild(camera);
+
+        this.physics = new Physics(this.scene);
     }
 
     update() {
@@ -152,6 +158,10 @@ class Application {
 
         if(this.lightMove) {
             this.updateLight();
+        }
+
+        if (this.physics) {
+            this.physics.update(dt);
         }
     }
 
@@ -194,6 +204,11 @@ class Application {
         } else {
             this.currentSpaceship.disable();
         }
+    }
+
+    createCollisionObject(pos,l,w,h) {
+        let collisionObject = new collisionObject(pos,l,w,h);
+        return
     }
 
 }
