@@ -34,6 +34,18 @@ export default class SpaceshipCamera {
 
         this.firstLoop = true;
         this.initCameraMatrix = mat4.create();
+
+        // --------------------------------------------------------
+
+        this.spaceshipAudio = document.createElement("audio");
+        this.spaceshipAudio.src = "./../../assets/audio/Sub - Sub Bees.mp3";
+        this.spaceshipAudio.loop = true;
+        this.spaceshipAudio.volume = 0.2;
+
+        this.drivingAudio = document.createElement("audio");
+        this.drivingAudio.src = "./../../assets/audio/415673__burghrecords__spaceship-cruising-ufo_2.mp3";
+        this.drivingAudio.loop = true;
+        this.drivingAudio.volume = 0.2;
     }
 
     // ----------------------------------------------------------
@@ -104,6 +116,28 @@ export default class SpaceshipCamera {
         mat4.fromRotation(cameraMatrix, this.cameraRotation, [0,1,0]);
 
         mat4.multiply(cam.matrix, cameraMatrix, this.initCameraMatrix);
+
+        //-----------------------
+        // Play spaceship sounds:
+        //-----------------------
+        if(this.keys['KeyW'] || this.keys['KeyS']) {
+            this.spaceshipAudio.pause();
+            this.spaceshipAudio.currentTime = 0;
+            this.drivingAudio.play();
+
+            if(this.drivingAudio.currentTime > 4) {
+                this.drivingAudio.currentTime = 0;
+            }
+        }
+        else if(!(this.keys['KeyW'] || this.keys['KeyS'])) {
+            this.drivingAudio.pause();
+            this.drivingAudio.currentTime = 0;
+            this.spaceshipAudio.play();
+
+            if(this.spaceshipAudio.currentTime > 3) {
+                this.spaceshipAudio.currentTime = 0;
+            }
+        }
     }
 
     enable() {

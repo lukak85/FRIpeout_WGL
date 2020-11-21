@@ -14,7 +14,7 @@ out vec2 vTexCoord;
 
 out float fogVisibility;
 
-const float fogDensity = 0.007;
+const float fogDensity = 0.0037;
 const float fogGradient = 1.5;
 
 void main() {

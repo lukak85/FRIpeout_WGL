@@ -53,6 +53,8 @@ class MMApplication {
             canvas.width = canvas.clientWidth;
             canvas.height = canvas.clientHeight;
 
+            console.log(this.gl);
+
             gl.viewport(0, 0, gl.drawingBufferWidth, gl.drawingBufferHeight);
 
             this.resize();
@@ -142,6 +144,10 @@ class MMApplication {
         this.resize();
 
         console.log(this.scene);
+
+        let startupAudio = document.createElement("audio");
+        startupAudio.src = "./../../assets/audio/Impact - Deep Down.mp3";
+        startupAudio.play();
     }
 
     update() {

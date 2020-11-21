@@ -99,10 +99,15 @@ class Application {
 
         this.scene.nodes[2].translation[2] = 10;
 
-        // Creation of floors:
-        await this.loader.load('../assets/models/envivorment/floor/floor.gltf');
+        // Creation of racetrack:
+        await this.loader.load('../assets/models/envivorment/racetrack/race_track.gltf');
+        let racetrack = await this.loader.loadScene(this.loader.defaultScene);
+        this.scene.addNode(racetrack.nodes[0]);
+
+        // Creation of floor:
+        /* await this.loader.load('../assets/models/envivorment/floor/floor.gltf');
         let floor = await this.loader.loadScene(this.loader.defaultScene);
-        this.scene.addNode(floor.nodes[1]);
+        this.scene.addNode(floor.nodes[1]); */
 
         // Creation of skybox:
         /* await this.loader.load('../assets/models/envivorment/cubemap/skybox.gltf');
