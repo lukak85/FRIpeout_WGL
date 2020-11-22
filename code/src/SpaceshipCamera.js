@@ -12,8 +12,8 @@ export default class SpaceshipCamera {
 
         this.velocity = [0,0,0];
         this.mouseSensitivity = 0.0002;
-        this.maxSpeed = 45;
-        this.friction = 0.15;
+        this.maxSpeed = 85;
+        this.friction = 0.05;
         this.acceleration = 20;
 
         this.mousemoveHandler = this.mousemoveHandler.bind(this);
