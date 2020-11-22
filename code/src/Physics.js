@@ -1,3 +1,5 @@
+import CollisionObject from "./CollisionObject.js";
+
 const vec3 = glMatrix.vec3;
 const mat4 = glMatrix.mat4;
 
@@ -7,27 +9,16 @@ export default class Physics {
         this.scene = scene;
     }
 
-    update(dt, spaceship) {
-       /*  this.scene.traverse(node => {
-            if (node.velocity) {
-                vec3.scaleAndAdd(node.translation, node.translation, node.velocity, dt);
-                node.updateTransform();
-                this.scene.traverse(other => {
-                    if (node !== other) {
-                        this.resolveCollision(node, other);
-                    }
-                });
-            }
-        }); */
-        if (node.velocity) {
-            vec3.scaleAndAdd(node.translation, node.translation, node.velocity, dt);
-            node.updateTransform();
-            this.scene.traverse(other => {
-                if (node !== other) {
+    update(spaceship) {
+        this.scene.traverse(other => {
+            if (other instanceof CollisionObject) {
+                // First child is camera, second child is collision object (in the case of a spaceship):
+                if(other != spaceship.spaceship.children[1]) {
+                    // If the object we're colliding with isn't the object itself:
                     this.resolveCollision(spaceship, other);
                 }
-            });
-        }
+            }
+        });
     }
 
     intervalIntersection(min1, max1, min2, max2) {
@@ -40,10 +31,13 @@ export default class Physics {
             && this.intervalIntersection(aabb1.min[2], aabb1.max[2], aabb2.min[2], aabb2.max[2]);
     }
 
-    resolveCollision(a, b) {
-        // Update bounding boxes with global translation.
-        const ta = a.getGlobalTransform();
-        const tb = b.getGlobalTransform();
+    resolveCollision(spaceship, b) {
+        let a = spaceship.spaceship.children[1];
+
+        let ta = mat4.create();
+        mat4.mul(ta, a.parent.matrix, a.matrix);
+        let tb = mat4.create();
+        mat4.mul(tb, b.parent.matrix, b.matrix);
 
         const posa = mat4.getTranslation(vec3.create(), ta);
         const posb = mat4.getTranslation(vec3.create(), tb);
@@ -97,8 +91,14 @@ export default class Physics {
             minDirection = [0, 0, -minDiff];
         }
 
-        vec3.add(a.translation, a.translation, minDirection);
-        a.updateTransform();
+        let getBeforeTranslation = vec3.create();
+        mat4.getTranslation(getBeforeTranslation, a.parent.matrix);
+        vec3.add(getBeforeTranslation, getBeforeTranslation, minDirection);
+        mat4.fromTranslation(spaceship.translationMatrix, getBeforeTranslation);
+
+        a.parent.translation[0] = getBeforeTranslation[0];
+        a.parent.translation[1] = getBeforeTranslation[1];
+        a.parent.translation[2] = getBeforeTranslation[2];
     }
 
 }

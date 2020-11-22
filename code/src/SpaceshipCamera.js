@@ -14,7 +14,7 @@ export default class SpaceshipCamera {
         this.mouseSensitivity = 0.0002;
         this.maxSpeed = 45;
         this.friction = 0.15;
-        this.acceleration = 50;
+        this.acceleration = 20;
 
         this.mousemoveHandler = this.mousemoveHandler.bind(this);
         this.keydownHandler = this.keydownHandler.bind(this);
@@ -40,12 +40,14 @@ export default class SpaceshipCamera {
         this.spaceshipAudio = document.createElement("audio");
         this.spaceshipAudio.src = "./../../assets/audio/Sub - Sub Bees.mp3";
         this.spaceshipAudio.loop = true;
-        this.spaceshipAudio.volume = 0.2;
+        //this.spaceshipAudio.volume = 0.2;
+        this.spaceshipAudio.volume = 0.0;
 
         this.drivingAudio = document.createElement("audio");
         this.drivingAudio.src = "./../../assets/audio/415673__burghrecords__spaceship-cruising-ufo_2.mp3";
         this.drivingAudio.loop = true;
-        this.drivingAudio.volume = 0.2;
+        //this.drivingAudio.volume = 0.2;
+        this.drivingAudio.volume = 0.0;
     }
 
     // ----------------------------------------------------------
@@ -77,16 +79,18 @@ export default class SpaceshipCamera {
         }
 
         // 2: update velocity
-        vec3.scaleAndAdd(this.velocity, this.velocity, acc, dt * this.acceleration);
+        vec3.scaleAndAdd(this.velocity, this.velocity, acc,  dt * this.acceleration);
 
         // 3: if no movement, apply friction
         vec3.scale(this.velocity, this.velocity, 1 - this.friction);
+
 
         // 4: limit speed
         const len = vec3.len(this.velocity);
         if (len > this.maxSpeed) {
             vec3.scale(this.velocity, this.velocity, this.maxSpeed / len);
         }
+
 
         let tempMatrix = mat4.create();
 
@@ -120,25 +124,6 @@ export default class SpaceshipCamera {
         //-----------------------
         // Play spaceship sounds:
         //-----------------------
-        /* if(this.keys['KeyW'] || this.keys['KeyS']) {
-            this.spaceshipAudio.pause();
-            this.spaceshipAudio.currentTime = 0;
-            this.drivingAudio.play();
-
-            if(this.drivingAudio.currentTime > 4) {
-                this.drivingAudio.currentTime = 0;
-            }
-        }
-        else if(!(this.keys['KeyW'] || this.keys['KeyS'])) {
-            this.drivingAudio.pause();
-            this.drivingAudio.currentTime = 0;
-            this.spaceshipAudio.play();
-
-            if(this.spaceshipAudio.currentTime > 3) {
-                this.spaceshipAudio.currentTime = 0;
-            }
-        } */
-
         if(Math.abs(this.velocity[0]) > 0.01 || Math.abs(this.velocity[1]) > 0.01) {
             this.spaceshipAudio.pause();
             this.spaceshipAudio.currentTime = 0;
