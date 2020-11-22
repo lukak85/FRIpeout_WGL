@@ -7,11 +7,16 @@ export default class CollisionObject extends Node {
         super();
         this.translation = vec3.create(position);
 
-        console.log(position);
+        // console.log(position);
 
-        this.aabb = {
+        /* this.aabb = {
             min: [position[0]-length/2, position[1]-height/2, position[2]-width/2],
             max: [position[0]+length/2, position[1]+height/2, position[2]+width/2]
+        }; */
+
+        this.aabb = {
+            min: [-length/2, -height/2, -width/2],
+            max: [length/2, height/2, width/2]
         };
     }
 }

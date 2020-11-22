@@ -12,9 +12,9 @@ export default class SpaceshipCamera {
 
         this.velocity = [0,0,0];
         this.mouseSensitivity = 0.0002;
-        this.maxSpeed = 85;
-        this.friction = 0.05;
-        this.acceleration = 20;
+        this.maxSpeed = 45;
+        this.friction = 0.2;
+        this.acceleration = 50;
 
         this.mousemoveHandler = this.mousemoveHandler.bind(this);
         this.keydownHandler = this.keydownHandler.bind(this);
@@ -41,13 +41,13 @@ export default class SpaceshipCamera {
         this.spaceshipAudio.src = "./../../assets/audio/Sub - Sub Bees.mp3";
         this.spaceshipAudio.loop = true;
         //this.spaceshipAudio.volume = 0.2;
-        this.spaceshipAudio.volume = 0.0;
+        this.spaceshipAudio.volume = 0.2;
 
         this.drivingAudio = document.createElement("audio");
         this.drivingAudio.src = "./../../assets/audio/415673__burghrecords__spaceship-cruising-ufo_2.mp3";
         this.drivingAudio.loop = true;
         //this.drivingAudio.volume = 0.2;
-        this.drivingAudio.volume = 0.0;
+        this.drivingAudio.volume = 0.2;
     }
 
     // ----------------------------------------------------------

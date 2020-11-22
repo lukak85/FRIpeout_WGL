@@ -105,6 +105,12 @@ class Application {
         let racetrack = await this.loader.loadScene(this.loader.defaultScene);
         this.scene.addNode(racetrack.nodes[0]);
 
+        // Creation of walls:
+        await this.loader.load('../assets/models/envivorment/walls/racetrack_walls.gltf');
+        let walls= await this.loader.loadScene(this.loader.defaultScene);
+        this.scene.addNode(walls.nodes[0]);
+
+
         // Just a simple light so we can see the scene:
         let light = new Light();
         light.translation[0] = this.LightX;
@@ -140,12 +146,50 @@ class Application {
         /* console.log(this.currentSpaceship.spaceship); */
 
         let testCube = new Node();
-        testCube.translation = vec3.create([0,0,100]);
-        testCube.matrix = mat4.fromTranslation(testCube.matrix, testCube.translation);
-
-        testCube = this.addCollisionCube(testCube,230.71,100,331.44,[155.35,0,105.72]);
-
+        testCube.translation = [155.35,0,105.72];
+        testCube = this.addCollisionCube(testCube,230.71,100,331.44);
+        mat4.fromTranslation(testCube.matrix, testCube.translation);
         this.scene.addNode(testCube);
+
+        let testCube2 = new Node();
+        testCube2.translation = [386.19,0,-15.46];
+        testCube2 = this.addCollisionCube(testCube2,256.97,100,80.08);
+        mat4.fromTranslation(testCube2.matrix, testCube2.translation);
+        this.scene.addNode(testCube2);
+
+        let testcube3 = new Node();
+        testcube3.translation = [550.00,0,305.00];
+        testcube3 = this.addCollisionCube(testcube3,400.0,200,400.0);
+        mat4.fromTranslation(testcube3.matrix, testcube3.translation);
+        this.scene.addNode(testcube3);
+
+        let testcube4 = new Node();
+        testcube4.translation = [155.00,0,550.00];
+        testcube4 = this.addCollisionCube(testcube4,400.0,200,400.0);
+        mat4.fromTranslation(testcube4.matrix, testcube4.translation);
+        this.scene.addNode(testcube4);
+
+        let testcube5 = new Node();
+        testcube5.translation = [-80.00,0,150.00];
+        testcube5 = this.addCollisionCube(testcube5,80.0,200,1000.0);
+        mat4.fromTranslation(testcube5.matrix, testcube5.translation);
+        this.scene.addNode(testcube5);
+
+        let testcube6 = new Node();
+        testcube6.translation = [200,0,-180.00];
+        testcube6 = this.addCollisionCube(testcube6,1000.0,200,80.0);
+        mat4.fromTranslation(testcube6.matrix, testcube6.translation);
+        this.scene.addNode(testcube6);
+
+        let testcube7 = new Node();
+        testcube7.translation = [635.00,0,20.00];
+        testcube7 = this.addCollisionCube(testcube7,80.0,200,1000.0);
+        mat4.fromTranslation(testcube7.matrix, testcube7.translation);
+        this.scene.addNode(testcube7);
+    }
+
+    addBorder() {
+
     }
 
     getSpeed(vector){
@@ -154,11 +198,11 @@ class Application {
     }
 
     update() {
-        // Noting at the moment
         if(isPaused){
             this.startTime = Date.now();;
             return;
         }
+
         const t = this.time = Date.now();
         const dt = (this.time - this.startTime) * 0.001;
         this.startTime = this.time;
@@ -174,10 +218,6 @@ class Application {
 
         if (this.physics && this.loaded) {
             this.physics.update(this.currentSpaceship);
-        }
-
-        if(this.loaded) {
-            console.log(this.currentSpaceship.spaceship.translation);
         }
     }
 
@@ -228,7 +268,6 @@ class Application {
 
     addCollisionCube(object, length, height, width, position=[0,0,0]) {
         // Lenght is x, width is z, height is y.
-        console.log(position);
         let collisionCube = new CollisionObject(position, length, height, width);
         object.addChild(collisionCube);
         return object;
@@ -251,7 +290,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
 //Keys detect
-document.onkeydown = function(e) { 
+document.onkeydown = function(e) {
     switch (e.key) { 
         //Right shift key -special ability (optional)
         case 16:

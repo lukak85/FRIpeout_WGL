@@ -9,9 +9,8 @@ Currently working:
 * Non-static camera attached to the object (delayed movement to behind the player)
 * Menu with vehicle selection
 * Sound effects
+* Collision detection (needs some tweaking)
 
 To add/wishlist:
-* Collision detection
 * Motion blur
-* UI
 * Music
