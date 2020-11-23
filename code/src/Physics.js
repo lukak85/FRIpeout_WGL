@@ -7,6 +7,8 @@ export default class Physics {
 
     constructor(scene) {
         this.scene = scene;
+
+        this.shipDamage = 0;
     }
 
     update(spaceship) {
@@ -99,6 +101,8 @@ export default class Physics {
         a.parent.translation[0] = getBeforeTranslation[0];
         a.parent.translation[1] = getBeforeTranslation[1];
         a.parent.translation[2] = getBeforeTranslation[2];
+
+        this.shipDamage += 1;
     }
 
 }

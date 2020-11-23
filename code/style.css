@@ -60,6 +60,7 @@ body, html {
     width: 100%;
     font-size: 1em;
     font-style: italic;
+}
 
 #myProgress {
     position: absolute;
@@ -74,7 +75,8 @@ body, html {
     bottom: 30px;
     width: 0%;
     height: 30px;
-    background-color: #4CAF50;
+    /* background-color: #4CAF50; */
+    background-color: #6d1c17;
     visibility: visible;
 }
 

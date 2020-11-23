@@ -237,10 +237,6 @@ class Application {
         console.log(this.scene);
     }
 
-    addBorder() {
-
-    }
-
     getSpeed(vector){
         let curSpeed = Math.sqrt(vector[0]* vector[0] + vector[1]* vector[1] + vector[2]* vector[2]);
         return curSpeed > 0.05 ? Math.round(curSpeed*100) : 0;
@@ -264,7 +260,7 @@ class Application {
 
 
 
-        document.getElementById('time').innerText = "Current time: " + Math.round(currentTime/60) + " min " + Math.round(currentTime%60) + " sec.";
+        document.getElementById('time').innerText = "Current time: " + Math.floor(currentTime/60) + " min " + Math.floor(currentTime%60) + " sec.";
         if(this.loaded) {
             this.currentSpaceship.update(dt);
 
@@ -279,6 +275,16 @@ class Application {
             document.getElementById('speed').innerText = "Current speed: " + spaceshipSpeed + " u/s";
             lastLocation = tmpLoc;
 
+            //Speed bar
+            var bar = document.getElementById('myBar');
+            /* var speed = this.getSpeed(this.currentSpaceship.velocity); */
+            var speed = spaceshipSpeed;
+
+            if (speed > maxspeed)
+                maxspeed = speed;
+
+            throttle.style.width = speed*(100/maxspeed) + "%";
+
         }
 
         if(this.lightMove) {
@@ -292,8 +298,17 @@ class Application {
         /* if(this.loaded) {
             console.log(this.currentSpaceship.spaceship.translation);
         } */
-        
+
         frame = (frame + 1) % 60;
+
+        /* if (this.physics && this.loaded) {
+            console.log(this.physics);
+            console.log(this.physics.shipDamage);
+            if(this.physics.shipDamage > 200) {
+                isPaused = true;
+                console.log("Your ship was destroyed");
+            }
+        } */
     }
 
     updateLight() {

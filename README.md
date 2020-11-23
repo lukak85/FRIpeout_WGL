@@ -1,5 +1,5 @@
 # FRIpeout
-Fripeut WebGL version 0.4.
+Fripeut WebGL version 0.6.
 
 Currently working:
 * Object spawning
@@ -10,6 +10,8 @@ Currently working:
 * Menu with vehicle selection
 * Sound effects
 * Collision detection (needs some tweaking)
+* Added boat damage system (needs a visual indicator)
+* Checkpoint system
 
 To add/wishlist:
 * Motion blur
