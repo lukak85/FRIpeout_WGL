@@ -15,6 +15,7 @@ export default class SpaceshipCamera {
         this.maxSpeed = 45;
         this.friction = 0.2;
         this.acceleration = 50;
+        this.started = false;
 
         this.mousemoveHandler = this.mousemoveHandler.bind(this);
         this.keydownHandler = this.keydownHandler.bind(this);
@@ -67,6 +68,7 @@ export default class SpaceshipCamera {
         let acc = vec3.create();
         if (this.keys['KeyW']) {
             vec3.add(acc, acc, forward);
+            this.started = true;
         }
         if (this.keys['KeyS']) {
             vec3.sub(acc, acc, forward);
