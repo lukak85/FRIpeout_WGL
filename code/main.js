@@ -8,6 +8,7 @@ import Node from './imported_code/Node.js';
 
 const vec3 = glMatrix.vec3;
 const mat4 = glMatrix.mat4;
+var maxspeed = 0;
 let isPaused = false;
 class Application {
 
@@ -212,6 +213,15 @@ class Application {
         if(this.loaded) {
             this.currentSpaceship.update(dt);
             document.getElementById('speed').innerText = "Current speed: " +  this.getSpeed(this.currentSpaceship.velocity) + " u/s";
+            
+            //Speed bar
+            var bar = document.getElementById('myBar');
+            var speed = this.getSpeed(this.currentSpaceship.velocity);
+
+            if (speed > maxspeed)
+                maxspeed = speed;
+
+            throttle.style.width = speed*(100/maxspeed) + "%";
         }
 
         if(this.lightMove) {
