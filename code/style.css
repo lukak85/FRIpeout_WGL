@@ -52,6 +52,7 @@ body, html {
     visibility: visible;
 }
 
+
 #time {
     text-align: left;
     position: absolute;
@@ -59,6 +60,21 @@ body, html {
     width: 100%;
     font-size: 1em;
     font-style: italic;
+
+#myProgress {
+    position: absolute;
+    bottom: 30px;
+    width: 100%;
+    background-color: #ddd;
+    visibility: visible;
+}
+
+#throttle {
+    position: absolute;
+    bottom: 30px;
+    width: 0%;
+    height: 30px;
+    background-color: #4CAF50;
     visibility: visible;
 }
 
