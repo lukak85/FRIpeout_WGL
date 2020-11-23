@@ -52,6 +52,15 @@ body, html {
     visibility: visible;
 }
 
+
+#time {
+    text-align: left;
+    position: absolute;
+    top: 30px;
+    width: 100%;
+    font-size: 1em;
+    font-style: italic;
+
 #myProgress {
     position: absolute;
     bottom: 30px;

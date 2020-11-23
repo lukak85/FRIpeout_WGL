@@ -10,6 +10,12 @@ const vec3 = glMatrix.vec3;
 const mat4 = glMatrix.mat4;
 var maxspeed = 0;
 let isPaused = false;
+let lastLocation = [0,0];
+let frame = 0;
+let spaceshipSpeed = 0;
+let currentTime = 0;
+let timeStarted = false;
+
 class Application {
 
     constructor(canvas) {
@@ -200,28 +206,39 @@ class Application {
         return curSpeed > 0.05 ? Math.round(curSpeed*100) : 0;
     }
 
+    calculateSpeed(lastLocation, curLocation,dt){
+
+        return Math.sqrt((lastLocation[0] - curLocation[0]) * (lastLocation[0] - curLocation[0])  + (lastLocation[1] - curLocation[1]) * (lastLocation[1] - curLocation[1])) / dt;
+    }
+
     update() {
         if(isPaused){
-            this.startTime = Date.now();;
+            this.startTime = Date.now();
             return;
         }
+
 
         const t = this.time = Date.now();
         const dt = (this.time - this.startTime) * 0.001;
         this.startTime = this.time;
 
+
+
+        document.getElementById('time').innerText = "Current time: " + Math.round(currentTime/60) + " min " + Math.round(currentTime%60) + " sec.";
         if(this.loaded) {
             this.currentSpaceship.update(dt);
-            document.getElementById('speed').innerText = "Current speed: " +  this.getSpeed(this.currentSpaceship.velocity) + " u/s";
-            
-            //Speed bar
-            var bar = document.getElementById('myBar');
-            var speed = this.getSpeed(this.currentSpaceship.velocity);
 
-            if (speed > maxspeed)
-                maxspeed = speed;
+            if(this.currentSpaceship.started){
+                currentTime += dt;
+            }
+            let tmpLoc = [this.currentSpaceship.spaceship.translation[0],this.currentSpaceship.spaceship.translation[2]];
 
-            throttle.style.width = speed*(100/maxspeed) + "%";
+            if(frame % 6 == 0){
+                spaceshipSpeed = Math.round( this.calculateSpeed(lastLocation,tmpLoc,dt ));
+            }
+            document.getElementById('speed').innerText = "Current speed: " + spaceshipSpeed + " u/s";
+            lastLocation = tmpLoc;
+
         }
 
         if(this.lightMove) {
@@ -231,6 +248,7 @@ class Application {
         if (this.physics && this.loaded) {
             this.physics.update(this.currentSpaceship);
         }
+        frame = (frame + 1) % 60;
     }
 
     updateLight() {
