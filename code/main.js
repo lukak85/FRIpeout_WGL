@@ -186,6 +186,8 @@ class Application {
         testcube7 = this.addCollisionCube(testcube7,80.0,200,1000.0);
         mat4.fromTranslation(testcube7.matrix, testcube7.translation);
         this.scene.addNode(testcube7);
+
+        console.log(this.scene);
     }
 
     addBorder() {
