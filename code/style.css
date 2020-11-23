@@ -51,6 +51,33 @@ body, html {
     font-style: italic;
     visibility: visible;
 }
+#Checkpoint {
+    text-align: center;
+    position: absolute;
+    top: 40px;
+    width: 100%;
+    font-size: 3em;
+    font-style: italic;
+    visibility: hidden;
+}
+.krog {
+    text-align: right;
+    right: 320px;
+    position: absolute;
+    width: 100%;
+    font-size: 1em;
+    font-style: italic;
+    visibility: visible;
+}
+#krog1 {
+    top: 5px;
+}
+#krog2 {
+    top: 20px;
+}
+#krog3 {
+    top: 35px;
+}
 
 
 #time {

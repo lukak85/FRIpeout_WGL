@@ -1,7 +1,9 @@
 import CollisionObject from "./CollisionObject.js";
+import CheckpointObject from "./CheckpointObject.js";
 
 const vec3 = glMatrix.vec3;
 const mat4 = glMatrix.mat4;
+
 
 export default class Physics {
 
@@ -12,6 +14,7 @@ export default class Physics {
     }
 
     update(spaceship) {
+        let result;
         this.scene.traverse(other => {
             if (other instanceof CollisionObject) {
                 // First child is camera, second child is collision object (in the case of a spaceship):
@@ -20,7 +23,18 @@ export default class Physics {
                     this.resolveCollision(spaceship, other);
                 }
             }
+            if (other instanceof CheckpointObject) {
+                // First child is camera, second child is collision object (in the case of a spaceship):
+                if(other != spaceship.spaceship.children[1]) {
+                    // If the object we're colliding with isn't the object itself:
+                    let tmp = this.resolveCollisionCheckpoint(spaceship, other);
+                    if(tmp){
+                        result = other;
+                    }
+                }
+            }
         });
+        return result;
     }
 
     intervalIntersection(min1, max1, min2, max2) {
@@ -103,6 +117,38 @@ export default class Physics {
         a.parent.translation[2] = getBeforeTranslation[2];
 
         this.shipDamage += 1;
+    }
+
+    resolveCollisionCheckpoint(spaceship, b) {
+        let a = spaceship.spaceship.children[1];
+
+        let ta = mat4.create();
+        mat4.mul(ta, a.parent.matrix, a.matrix);
+        let tb = mat4.create();
+        mat4.mul(tb, b.parent.matrix, b.matrix);
+
+        const posa = mat4.getTranslation(vec3.create(), ta);
+        const posb = mat4.getTranslation(vec3.create(), tb);
+
+        const mina = vec3.add(vec3.create(), posa, a.aabb.min);
+        const maxa = vec3.add(vec3.create(), posa, a.aabb.max);
+        const minb = vec3.add(vec3.create(), posb, b.aabb.min);
+        const maxb = vec3.add(vec3.create(), posb, b.aabb.max);
+
+        // Check if there is collision.
+        const isColliding = this.aabbIntersection({
+            min: mina,
+            max: maxa
+        }, {
+            min: minb,
+            max: maxb
+        });
+
+        if (!isColliding) {
+            return;
+        }
+
+        return true;
     }
 
 }

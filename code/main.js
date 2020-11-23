@@ -5,6 +5,7 @@ import Physics from './src/Physics.js';
 import Light from './imported_code/Light.js'
 import CollisionObject from './src/CollisionObject.js';
 import Node from './imported_code/Node.js';
+import CheckpointObject from "./src/CheckpointObject.js";
 
 const vec3 = glMatrix.vec3;
 const mat4 = glMatrix.mat4;
@@ -14,7 +15,10 @@ let lastLocation = [0,0];
 let frame = 0;
 let spaceshipSpeed = 0;
 let currentTime = 0;
-let timeStarted = false;
+
+let checkpoints = [];
+let checkpointsBool = [false,true];
+let laps = [0,0,0]
 
 class Application {
 
@@ -234,7 +238,21 @@ class Application {
         mat4.fromTranslation(testcube7.matrix, testcube7.translation);
         this.scene.addNode(testcube7);
 
-        console.log(this.scene);
+        let finish = new Node();
+        finish.translation = [0.00,0,10.00];
+        finish = this.addCheckpoint(finish,90.0,0,20.0);
+        mat4.fromTranslation(finish.matrix, finish.translation);
+        this.scene.addNode(finish);
+        checkpoints.push(finish.children[0]);
+
+
+        let midPoint = new Node();
+        midPoint.translation = [363.0,0,(105.0+27.0)/2];
+        midPoint = this.addCheckpoint(midPoint,20,0,80);
+        mat4.fromTranslation(midPoint.matrix, midPoint.translation);
+        this.scene.addNode(midPoint);
+        checkpoints.push(midPoint.children[0]);
+
     }
 
     getSpeed(vector){
@@ -267,6 +285,7 @@ class Application {
             if(this.currentSpaceship.started){
                 currentTime += dt;
             }
+            //console.log(this.currentSpaceship.spaceship.translation);
             let tmpLoc = [this.currentSpaceship.spaceship.translation[0],this.currentSpaceship.spaceship.translation[2]];
 
             if(frame % 6 == 0){
@@ -292,7 +311,29 @@ class Application {
         }
 
         if (this.physics && this.loaded) {
-            this.physics.update(this.currentSpaceship);
+            let a = this.physics.update(this.currentSpaceship);
+            if(a) {
+                if (this.checkIfCheckpointsMatch(a, checkpoints[0]) && checkpointsBool[0]) {
+                    checkpointsBool[0] = false;
+                    checkpointsBool[1] = true;
+                    console.log("checkpoint")
+                    document.getElementById("Checkpoint").style.visibility = "visible";
+                    document.getElementById("Checkpoint").innerText = "Krog koncan, čas: " + Math.round(currentTime * 100) / 100 + " sekund" ;
+
+                    setTimeout(this.hide,3000);
+                    this.addShowlaps(currentTime);
+                    console.log(laps);
+                    currentTime = 0;
+                }
+                if (this.checkIfCheckpointsMatch(a, checkpoints[1]) && checkpointsBool[1]) {
+                    checkpointsBool[0] = true;
+                    checkpointsBool[1] = false;
+                    document.getElementById("Checkpoint").style.visibility = "visible";
+                    document.getElementById("Checkpoint").innerText = "Checkpoint pred ciljem dosežen, " + Math.floor(currentTime* 100) / 100  + " sekund";
+                    setTimeout(this.hide,1500);
+                }
+            }
+
         }
 
         /* if(this.loaded) {
@@ -309,6 +350,21 @@ class Application {
                 console.log("Your ship was destroyed");
             }
         } */
+    }
+
+    addShowlaps(ct) {
+        laps.unshift(ct);
+        document.getElementById("krog1").innerText = Math.floor(laps[0] * 100) / 100 + " sekund";
+        document.getElementById("krog2").innerText = Math.floor(laps[1] * 100) / 100 + " sekund" ;
+        document.getElementById("krog3").innerText = Math.floor(laps[2] * 100) / 100 + " sekund";
+    }
+
+    hide(){
+        document.getElementById("Checkpoint").style.visibility = "hidden";
+    }
+    checkIfCheckpointsMatch(a,b){
+        return (a.aabb.max[0] == b.aabb.max[0] &&
+                a.aabb.min[0] == b.aabb.min[0]);
     }
 
     updateLight() {
@@ -360,6 +416,12 @@ class Application {
         // Lenght is x, width is z, height is y.
         let collisionCube = new CollisionObject(position, length, height, width);
         object.addChild(collisionCube);
+        return object;
+    }
+    addCheckpoint(object, length, height, width, position=[0,0,0]) {
+        // Lenght is x, width is z, height is y.
+        let checkpointCube = new CheckpointObject(position, length, height, width);
+        object.addChild(checkpointCube);
         return object;
     }
 
