@@ -110,6 +110,46 @@ class Application {
         let walls= await this.loader.loadScene(this.loader.defaultScene);
         this.scene.addNode(walls.nodes[0]);
 
+        // ------------------
+        // BUILDING CREATION:
+        // ------------------
+        await this.loader.load('../assets/models/envivorment/buildings/skyscrapers/skyscraper1.gltf');
+        let skyscraper1_1 = await this.loader.loadScene(this.loader.defaultScene);
+        skyscraper1_1.nodes.translation = [-100,0,-50];
+        mat4.fromTranslation(skyscraper1_1.nodes[0].matrix, skyscraper1_1.nodes.translation);
+        this.scene.addNode(skyscraper1_1.nodes[0]);
+
+        await this.loader.load('../assets/models/envivorment/buildings/skyscrapers/skyscraper1.gltf');
+        let skyscraper1_2 = await this.loader.loadScene(this.loader.defaultScene);
+        skyscraper1_2.nodes.translation = [300,0,500];
+        mat4.fromTranslation(skyscraper1_2.nodes[0].matrix, skyscraper1_2.nodes.translation);
+        this.scene.addNode(skyscraper1_2.nodes[0]);
+
+        await this.loader.load('../assets/models/envivorment/buildings/skyscrapers/skyscraper2.gltf');
+        let skyscraper2_1 = await this.loader.loadScene(this.loader.defaultScene);
+        skyscraper2_1.nodes.translation = [20,-90,450];
+        mat4.fromTranslation(skyscraper2_1.nodes[0].matrix, skyscraper2_1.nodes.translation);
+        this.scene.addNode(skyscraper2_1.nodes[0]);
+
+        await this.loader.load('../assets/models/envivorment/buildings/skyscrapers/skyscraper2.gltf');
+        let skyscraper2_2 = await this.loader.loadScene(this.loader.defaultScene);
+        skyscraper2_2.nodes.translation = [200,0,-15];
+        mat4.fromTranslation(skyscraper2_2.nodes[0].matrix, skyscraper2_2.nodes.translation);
+        this.scene.addNode(skyscraper2_2.nodes[0]);
+
+        await this.loader.load('../assets/models/envivorment/buildings/skyscrapers/skyscraper3.gltf');
+        let skyscraper3_1 = await this.loader.loadScene(this.loader.defaultScene);
+        skyscraper3_1.nodes.translation = [800,0,-155];
+        mat4.fromTranslation(skyscraper3_1.nodes[0].matrix, skyscraper3_1.nodes.translation);
+        this.scene.addNode(skyscraper3_1.nodes[0]);
+
+        await this.loader.load('../assets/models/envivorment/buildings/skyscrapers/skyscraper3.gltf');
+        let skyscraper3_2 = await this.loader.loadScene(this.loader.defaultScene);
+        skyscraper3_2.nodes.translation = [300,-150,-255];
+        mat4.fromTranslation(skyscraper3_2.nodes[0].matrix, skyscraper3_2.nodes.translation);
+        this.scene.addNode(skyscraper3_2.nodes[0]);
+
+
 
         // Just a simple light so we can see the scene:
         let light = new Light();
@@ -142,7 +182,7 @@ class Application {
 
         this.physics = new Physics(this.scene);
 
-        this.currentSpaceship.spaceship = this.addCollisionCube(this.currentSpaceship.spaceship,10,10,10);
+        this.currentSpaceship.spaceship = this.addCollisionCube(this.currentSpaceship.spaceship,20,10,20);
         /* console.log(this.currentSpaceship.spaceship); */
 
         let testCube = new Node();
@@ -221,6 +261,10 @@ class Application {
         if (this.physics && this.loaded) {
             this.physics.update(this.currentSpaceship);
         }
+
+        /* if(this.loaded) {
+            console.log(this.currentSpaceship.spaceship.translation);
+        } */
     }
 
     updateLight() {
@@ -328,7 +372,8 @@ document.onkeydown = function(e) {
         case 78:
             //Function call /TODO
             break;
-        case 'e':
+        case 'p':
+        case 'Escape':
             //Function call /TODO
 
             Application.pause();
