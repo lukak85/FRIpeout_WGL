@@ -10,7 +10,7 @@ Currently working:
 * Menu with vehicle selection
 * Sound effects
 * Collision detection (needs some tweaking)
-* Added boat damage system (needs a visual indicator)
+* Added ship damage system
 * Checkpoint system
 
 To add/wishlist:
