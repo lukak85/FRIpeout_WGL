@@ -294,9 +294,9 @@ class Application {
 
     addShowlaps(ct) {
         laps.unshift(ct);
-        document.getElementById("krog1").innerText = (Math.floor(laps[0] * 100) / 100).toString();
-        document.getElementById("krog2").innerText = (Math.floor(laps[1] * 100) / 100).toString();
-        document.getElementById("krog3").innerText = (Math.floor(laps[2] * 100) / 100).toString();
+        document.getElementById("krog1").innerText = Math.floor(laps[0] * 100) / 100 + " sekund";
+        document.getElementById("krog2").innerText = Math.floor(laps[1] * 100) / 100 + " sekund" ;
+        document.getElementById("krog3").innerText = Math.floor(laps[2] * 100) / 100 + " sekund";
     }
 
     hide(){
