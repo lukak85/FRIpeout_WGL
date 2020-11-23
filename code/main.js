@@ -9,6 +9,7 @@ import CheckpointObject from "./src/CheckpointObject.js";
 
 const vec3 = glMatrix.vec3;
 const mat4 = glMatrix.mat4;
+var maxspeed = 0;
 let isPaused = false;
 let lastLocation = [0,0];
 let frame = 0;
@@ -244,6 +245,7 @@ class Application {
         document.getElementById('time').innerText = "Current time: " + Math.round(currentTime/60) + " min " + Math.round(currentTime%60) + " sec.";
         if(this.loaded) {
             this.currentSpaceship.update(dt);
+
             if(this.currentSpaceship.started){
                 currentTime += dt;
             }
@@ -255,6 +257,7 @@ class Application {
             }
             document.getElementById('speed').innerText = "Current speed: " + spaceshipSpeed + " u/s";
             lastLocation = tmpLoc;
+
         }
 
         if(this.lightMove) {
