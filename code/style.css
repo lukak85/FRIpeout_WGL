@@ -107,6 +107,30 @@ body, html {
     visibility: visible;
 }
 
+#healthBar {
+    position: absolute;
+    top: 15px;
+    left: 50px;
+    width: 20%;
+    background-color: #ddd;
+    visibility: visible;
+}
+
+#health {
+    position: absolute;
+    top: 0px;
+    width: 100%;
+    height: 30px;
+    background-color: #176d2c;
+    visibility: visible;
+}
+
+#healthtext {
+    position: absolute;
+    top: 0px;
+    left: 0px;
+}
+
 #paused {
     text-align: center;
     position: absolute;

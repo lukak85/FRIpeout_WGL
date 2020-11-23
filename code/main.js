@@ -20,6 +20,7 @@ let checkpoints = [];
 let checkpointsBool = [false,true];
 let laps = [0,0,0];
 let shipIsDestroyed = false;
+let shipHealth = 200;
 
 class Application {
 
@@ -305,6 +306,11 @@ class Application {
 
             throttle.style.width = speed*(100/maxspeed) + "%";
 
+            if(this.physics) {
+                //Health bar
+                var varhealth = shipHealth - this.physics.shipDamage;
+                document.getElementById('health').style.width = ((varhealth / shipHealth) * 100) + "%";
+            }
         }
 
         if(this.lightMove) {
@@ -344,7 +350,7 @@ class Application {
         frame = (frame + 1) % 60;
 
         if (this.physics && this.loaded) {
-            if(this.physics.shipDamage > 200) {
+            if(this.physics.shipDamage > shipHealth) {
                 isPaused = true;
                 console.log("Your ship was destroyed");
                 shipIsDestroyed = true;
