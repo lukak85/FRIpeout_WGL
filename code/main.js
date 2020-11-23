@@ -18,7 +18,8 @@ let currentTime = 0;
 
 let checkpoints = [];
 let checkpointsBool = [false,true];
-let laps = [0,0,0]
+let laps = [0,0,0];
+let shipIsDestroyed = false;
 
 class Application {
 
@@ -342,14 +343,14 @@ class Application {
 
         frame = (frame + 1) % 60;
 
-        /* if (this.physics && this.loaded) {
-            console.log(this.physics);
-            console.log(this.physics.shipDamage);
+        if (this.physics && this.loaded) {
             if(this.physics.shipDamage > 200) {
                 isPaused = true;
                 console.log("Your ship was destroyed");
+                shipIsDestroyed = true;
+                document.getElementById('destroyed').style.visibility = "visible";
             }
-        } */
+        }
     }
 
     addShowlaps(ct) {
@@ -481,10 +482,12 @@ document.onkeydown = function(e) {
         case 'p':
         case 'Escape':
             //Function call /TODO
-
-            Application.pause();
-            document.getElementById('paused').style.visibility = isPaused ? "visible" : "hidden";
-            break;
+            if(!shipIsDestroyed) {
+                console.log(shipIsDestroyed);
+                Application.pause();
+                document.getElementById('paused').style.visibility = isPaused ? "visible" : "hidden";
+                break;
+            }
     } 
 }; 
 
