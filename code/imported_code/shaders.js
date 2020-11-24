@@ -49,6 +49,8 @@ uniform vec3 uLightAttenuation[NUMBER_OF_LIGHTS];
 
 uniform vec3 fogColour;
 
+uniform int isSkybox;
+
 in vec3 vVertexPosition;
 in vec3 vNormal;
 in vec2 vTexCoord;
@@ -86,7 +88,12 @@ void main() {
     // oColor = texture(uTexture, vTexCoord);
     // oColor = vec4(0.0, 0.0, 0.0, 1.0);
 
-    oColor = mix(vec4(fogColour, 1.0), oColor, fogVisibility);
+    if(isSkybox == 1) {
+        oColor = mix(vec4(fogColour, 1.0), oColor, fogVisibility);
+    }
+    else {
+        oColor = mix(vec4(fogColour, 1.0), oColor, 0.8);
+    }
 }
 `;
 

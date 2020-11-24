@@ -257,7 +257,8 @@ export default class GLTFLoader {
                 aspect : persp.aspectRatio,
                 fov    : persp.yfov,
                 near   : persp.znear,
-                far    : persp.zfar,
+                /* far    : persp.zfar, */
+                far    : 2000,
             });
             this.cache.set(gltfSpec, camera);
             return camera;

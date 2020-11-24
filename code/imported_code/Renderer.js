@@ -1,6 +1,7 @@
 import * as WebGL from './WebGL.js';
 import shaders from './shaders.js';
 import Light from './Light.js';
+import SkyboxObject from '../src/SkyboxObject.js';
 
 const mat4 = glMatrix.mat4;
 const vec3 = glMatrix.vec3;
@@ -215,12 +216,19 @@ export default class Renderer {
         let lightCounter = 0;
 
         let fogColour = vec3.create();
-        fogColour = vec3.fromValues(0.552, 0.980, 1);
+        /* fogColour = vec3.fromValues(0.552, 0.980, 1); */
+        /* fogColour = vec3.fromValues(0.5, 0.5, 0.5); */
+        fogColour = vec3.fromValues(0.35, 0.32, 0.23);
+
 
         gl.uniform3fv(program.uniforms.fogColour, fogColour);
 
         scene.traverse(
             (node) => {
+                gl.uniform1i(program.uniforms.isSkybox, 1);
+                if (node.parent != null && node.parent instanceof SkyboxObject) {
+                    gl.uniform1i(program.uniforms.isSkybox, 0);
+                }
                 matrixStack.push(mat4.clone(matrix));
                 mat4.mul(matrix, matrix, node.matrix);
                 if(node.mesh && !(node instanceof Light)) {

@@ -6,6 +6,7 @@ import Light from './imported_code/Light.js'
 import CollisionObject from './src/CollisionObject.js';
 import Node from './imported_code/Node.js';
 import CheckpointObject from "./src/CheckpointObject.js";
+import SkyboxObject from './src/SkyboxObject.js';
 
 const vec3 = glMatrix.vec3;
 const mat4 = glMatrix.mat4;
@@ -166,8 +167,23 @@ class Application {
         let finishLine = await this.loader.loadScene(this.loader.defaultScene);
         this.scene.addNode(finishLine.nodes[0]);
 
+        // ----------------
+        // Skybox creation:
+        // ----------------
 
-        // Just a simple light so we can see the scene:
+        await this.loader.load('../assets/models/envivorment/skybox/skybox2.gltf');
+        let skybox = await this.loader.loadScene(this.loader.defaultScene);
+        let skyboxObject = new SkyboxObject();
+        skyboxObject.addChild(skybox.nodes[0]);
+        this.scene.addNode(skyboxObject);
+
+        this.skybox = skybox;
+
+
+        // ---------------
+        // Light creation:
+        // ---------------
+
         let light = new Light();
         light.translation[0] = this.LightX;
         light.translation[1] = this.LightY;
@@ -198,7 +214,9 @@ class Application {
 
         this.physics = new Physics(this.scene);
 
-        this.currentSpaceship.spaceship = this.addCollisionCube(this.currentSpaceship.spaceship,20,10,20);
+        this.currentSpaceship.spaceship = this.addCollisionCube(this.currentSpaceship.spaceship,15,10,15);
+        let secondSpaceship = this.scene.nodes[2];
+        secondSpaceship = this.addCollisionCube(secondSpaceship,10,10,10);
         /* console.log(this.currentSpaceship.spaceship); */
 
         let testCube = new Node();
@@ -242,6 +260,10 @@ class Application {
         testcube7 = this.addCollisionCube(testcube7,80.0,200,1000.0);
         mat4.fromTranslation(testcube7.matrix, testcube7.translation);
         this.scene.addNode(testcube7);
+        
+        //------------------
+        // Checkpoint setup:
+        //------------------
 
         let finish = new Node();
         finish.translation = [0.00,0,10.00];
@@ -249,7 +271,6 @@ class Application {
         mat4.fromTranslation(finish.matrix, finish.translation);
         this.scene.addNode(finish);
         checkpoints.push(finish.children[0]);
-
 
         let midPoint = new Node();
         midPoint.translation = [363.0,0,(105.0+27.0)/2];
@@ -359,6 +380,12 @@ class Application {
                 shipIsDestroyed = true;
                 document.getElementById('destroyed').style.visibility = "visible";
             }
+        }
+
+        if(this.skybox) {
+            let skybox = this.skybox.nodes[0];
+            vec3.copy(skybox.translation, this.currentSpaceship.spaceship.translation);
+            mat4.fromTranslation(skybox.matrix, skybox.translation);
         }
     }
 
