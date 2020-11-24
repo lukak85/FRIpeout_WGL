@@ -162,6 +162,9 @@ class Application {
         mat4.fromTranslation(skyscraper3_2.nodes[0].matrix, skyscraper3_2.nodes.translation);
         this.scene.addNode(skyscraper3_2.nodes[0]);
 
+        await this.loader.load('../assets/models/envivorment/finish/finishline.gltf');
+        let finishLine = await this.loader.loadScene(this.loader.defaultScene);
+        this.scene.addNode(finishLine.nodes[0]);
 
 
         // Just a simple light so we can see the scene:
