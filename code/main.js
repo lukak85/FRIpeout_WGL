@@ -333,7 +333,6 @@ class Application {
             return;
         }
 
-        console.log(this.scene)
         const t = this.time = Date.now();
         const dt = (this.time - this.startTime) * 0.001;
         this.startTime = this.time;
@@ -370,6 +369,8 @@ class Application {
                 var varhealth = shipHealth - this.physics.shipDamage;
                 document.getElementById('health').style.width = ((varhealth / shipHealth) * 100) + "%";
             }
+
+            this.powerupAnimate();
         }
 
         if(this.lightMove) {
@@ -382,13 +383,11 @@ class Application {
                 if (this.checkIfCheckpointsMatch(a, checkpoints[0]) && checkpointsBool[0]) {
                     checkpointsBool[0] = false;
                     checkpointsBool[1] = true;
-                    console.log("checkpoint")
                     document.getElementById("Checkpoint").style.visibility = "visible";
                     document.getElementById("Checkpoint").innerText = "Krog koncan, čas: " + Math.round(currentTime * 100) / 100 + " sekund" ;
 
                     setTimeout(this.hide,1000);
                     this.addShowlaps(currentTime);
-                    console.log(laps);
                     currentTime = 0;
                 }
                 if (this.checkIfCheckpointsMatch(a, checkpoints[1]) && checkpointsBool[1]) {
@@ -397,8 +396,6 @@ class Application {
                     document.getElementById("Checkpoint").style.visibility = "visible";
                     document.getElementById("Checkpoint").innerText = "Checkpoint pred ciljem dosežen, " + Math.floor(currentTime* 100) / 100  + " sekund";
                     setTimeout(this.hide,1500);
-                    console.log("V checkpointu");
-                    console.log(a);
                 }
                 if (this.checkIfCheckpointsMatch(a, powerups[0]) && powerupsBool[0]) {
                     document.getElementById("Powerup").style.visibility = "visible";
@@ -433,7 +430,6 @@ class Application {
         if (this.physics && this.loaded) {
             if(this.physics.shipDamage > shipHealth) {
                 isPaused = true;
-                console.log("Your ship was destroyed");
                 shipIsDestroyed = true;
                 document.getElementById('destroyed').style.visibility = "visible";
             }
@@ -444,6 +440,7 @@ class Application {
             vec3.copy(skybox.translation, this.currentSpaceship.spaceship.translation);
             mat4.fromTranslation(skybox.matrix, skybox.translation);
         }
+
     }
 
     addShowlaps(ct) {
@@ -524,19 +521,29 @@ class Application {
         object.addChild(checkpointCube);
         return object;
     }
-    checkIfPowerup(a){
-
-    }
 
     najdPowerup(powerup){
         for(let i = 0; i < this.scene.nodes.length ; i++){
             if(this.scene.nodes[i].children[0] && this.scene.nodes[i].children[0] instanceof PowerupObject ){
                 if(this.checkIfCheckpointsMatch(powerup, this.scene.nodes[i].children[0])) {
                     let tmp = this.scene.nodes[i].translation;
-                    mat4.fromTranslation(this.scene.nodes[i].matrix, [tmp[0], tmp[1] + 100, tmp[2]]);
-                    setTimeout(() => mat4.fromTranslation(this.scene.nodes[i].matrix, tmp), 2000)
-
+                    this.scene.nodes[i].translation = vec3.clone([tmp[0], tmp[1] + 100, tmp[2]]);
+                    mat4.fromTranslation(this.scene.nodes[i].matrix, this.scene.nodes[i].translation);
+                    setTimeout(() => {
+                        mat4.fromTranslation(this.scene.nodes[i].matrix, tmp);
+                        this.scene.nodes[i].translation = vec3.clone(tmp);
+                    }, 2000)
                 }
+            }
+        }
+    }
+
+    powerupAnimate() {
+        for(let i = 0; i < this.scene.nodes.length ; i++){
+            if(this.scene.nodes[i].children[0] && this.scene.nodes[i].children[0] instanceof PowerupObject ){
+                let timeTranslate = Math.sin(Date.now() / 200);
+                let tmp = this.scene.nodes[i].translation;
+                mat4.fromTranslation(this.scene.nodes[i].matrix, [tmp[0], tmp[1] + timeTranslate, tmp[2]]);
             }
         }
     }
@@ -598,7 +605,6 @@ document.onkeydown = function(e) {
         case 'Escape':
             //Function call /TODO
             if(!shipIsDestroyed) {
-                console.log(shipIsDestroyed);
                 Application.pause();
                 document.getElementById('paused').style.visibility = isPaused ? "visible" : "hidden";
                 break;
