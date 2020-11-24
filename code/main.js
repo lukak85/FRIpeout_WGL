@@ -7,6 +7,7 @@ import CollisionObject from './src/CollisionObject.js';
 import Node from './imported_code/Node.js';
 import CheckpointObject from "./src/CheckpointObject.js";
 import SkyboxObject from './src/SkyboxObject.js';
+import PowerupObject from "./src/PowerupObject.js";
 
 const vec3 = glMatrix.vec3;
 const mat4 = glMatrix.mat4;
@@ -18,6 +19,8 @@ let spaceshipSpeed = 0;
 let currentTime = 0;
 
 let checkpoints = [];
+let powerups = [];
+let powerupsBool = [true,true]
 let checkpointsBool = [false,true];
 let laps = [0,0,0];
 let shipIsDestroyed = false;
@@ -179,6 +182,38 @@ class Application {
 
         this.skybox = skybox;
 
+        //---------------
+        // Powerups
+        //---------------
+        await this.loader.load('../assets/models/envivorment/powerups/healthbar/powerup.gltf');
+        let hpPowerup1 = await this.loader.loadScene(this.loader.defaultScene);
+
+        hpPowerup1.nodes[0].translation = [290,0,284];
+        mat4.fromTranslation(hpPowerup1.nodes[0].matrix, hpPowerup1.nodes[0].translation);
+        this.scene.addNode(hpPowerup1.nodes[0]);
+
+        hpPowerup1.nodes[0] = this.addPowerup(hpPowerup1.nodes[0],10,0,10)
+
+       /* //collision
+        let hpPowerupObject1 = new Node();
+        hpPowerupObject1.translation = [290,0,284];
+        hpPowerupObject1 = this.addPowerup(hpPowerupObject1,10,0,10);
+        mat4.fromTranslation(hpPowerupObject1.matrix, hpPowerupObject1.translation);
+        this.scene.addNode(hpPowerupObject1);
+        */powerups.push(hpPowerup1.nodes[0].children[0]);
+
+        //speedPowerup
+
+        await this.loader.load('../assets/models/envivorment/powerups/speed/powerup.gltf');
+        let speedPowerup1 = await this.loader.loadScene(this.loader.defaultScene);
+
+        speedPowerup1.nodes[0].translation = [70,0,-111];
+        mat4.fromTranslation(speedPowerup1.nodes[0].matrix, speedPowerup1.nodes[0].translation);
+        this.scene.addNode(speedPowerup1.nodes[0]);
+        speedPowerup1.nodes[0] = this.addPowerup(speedPowerup1.nodes[0],12,0,12)
+
+        powerups.push(speedPowerup1.nodes[0].children[0]);
+
 
         // ---------------
         // Light creation:
@@ -297,7 +332,7 @@ class Application {
             return;
         }
 
-
+        console.log(this.scene)
         const t = this.time = Date.now();
         const dt = (this.time - this.startTime) * 0.001;
         this.startTime = this.time;
@@ -307,7 +342,6 @@ class Application {
         document.getElementById('time').innerText = "Current time: " + Math.floor(currentTime/60) + " min " + Math.floor(currentTime%60) + " sec.";
         if(this.loaded) {
             this.currentSpaceship.update(dt);
-
             if(this.currentSpaceship.started){
                 currentTime += dt;
             }
@@ -351,7 +385,7 @@ class Application {
                     document.getElementById("Checkpoint").style.visibility = "visible";
                     document.getElementById("Checkpoint").innerText = "Krog koncan, čas: " + Math.round(currentTime * 100) / 100 + " sekund" ;
 
-                    setTimeout(this.hide,3000);
+                    setTimeout(this.hide,1000);
                     this.addShowlaps(currentTime);
                     console.log(laps);
                     currentTime = 0;
@@ -362,6 +396,28 @@ class Application {
                     document.getElementById("Checkpoint").style.visibility = "visible";
                     document.getElementById("Checkpoint").innerText = "Checkpoint pred ciljem dosežen, " + Math.floor(currentTime* 100) / 100  + " sekund";
                     setTimeout(this.hide,1500);
+                    console.log("V checkpointu");
+                    console.log(a);
+                }
+                if (this.checkIfCheckpointsMatch(a, powerups[0]) && powerupsBool[0]) {
+                    document.getElementById("Powerup").style.visibility = "visible";
+                    document.getElementById("Powerup").innerText = "Health Restored 100%";
+                    this.physics.shipDamage = 0;
+                    setTimeout(()=> document.getElementById("Powerup").style.visibility = "hidden" ,1000);
+                    powerupsBool[0] = false;
+                    setTimeout(() => powerupsBool[0] = true, 2000)
+                    this.najdPowerup(a);
+                }
+                if (this.checkIfCheckpointsMatch(a, powerups[1]) && powerupsBool[1]) {
+                    document.getElementById("Powerup").style.visibility = "visible";
+                    document.getElementById("Powerup").innerText = "Speed boost active";
+                    this.currentSpaceship.acceleration = 100;
+                    setTimeout(()=> this.currentSpaceship.acceleration = 50 ,500);
+                    shipHealth = 100;
+                    setTimeout(()=> document.getElementById("Powerup").style.visibility = "hidden" ,2000);
+                    powerupsBool[0] = false;
+                    setTimeout(() => powerupsBool[0] = true, 2000)
+                    this.najdPowerup(a);
                 }
             }
 
@@ -391,9 +447,9 @@ class Application {
 
     addShowlaps(ct) {
         laps.unshift(ct);
-        document.getElementById("krog1").innerText = Math.floor(laps[0] * 100) / 100 + " sekund";
-        document.getElementById("krog2").innerText = Math.floor(laps[1] * 100) / 100 + " sekund" ;
-        document.getElementById("krog3").innerText = Math.floor(laps[2] * 100) / 100 + " sekund";
+        document.getElementById("krog1").innerText = "1. : " + Math.floor(laps[0] * 100) / 100 + " sekund";
+        document.getElementById("krog2").innerText = "2. : " + Math.floor(laps[1] * 100) / 100 + " sekund" ;
+        document.getElementById("krog3").innerText = "3. : " + Math.floor(laps[2] * 100) / 100 + " sekund";
     }
 
     hide(){
@@ -460,6 +516,28 @@ class Application {
         let checkpointCube = new CheckpointObject(position, length, height, width);
         object.addChild(checkpointCube);
         return object;
+    }
+    addPowerup(object, length, height, width, position=[0,0,0]) {
+        // Lenght is x, width is z, height is y.
+        let checkpointCube = new PowerupObject(position, length, height, width);
+        object.addChild(checkpointCube);
+        return object;
+    }
+    checkIfPowerup(a){
+
+    }
+
+    najdPowerup(powerup){
+        for(let i = 0; i < this.scene.nodes.length ; i++){
+            if(this.scene.nodes[i].children[0] && this.scene.nodes[i].children[0] instanceof PowerupObject ){
+                if(this.checkIfCheckpointsMatch(powerup, this.scene.nodes[i].children[0])) {
+                    let tmp = this.scene.nodes[i].translation;
+                    mat4.fromTranslation(this.scene.nodes[i].matrix, [tmp[0], tmp[1] + 100, tmp[2]]);
+                    setTimeout(() => mat4.fromTranslation(this.scene.nodes[i].matrix, tmp), 2000)
+
+                }
+            }
+        }
     }
 
 }

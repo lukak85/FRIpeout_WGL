@@ -1,5 +1,6 @@
 import CollisionObject from "./CollisionObject.js";
 import CheckpointObject from "./CheckpointObject.js";
+import PowerupObject from "./PowerupObject.js";
 
 const vec3 = glMatrix.vec3;
 const mat4 = glMatrix.mat4;
@@ -33,6 +34,17 @@ export default class Physics {
                     }
                 }
             }
+            if (other instanceof PowerupObject) {
+                // First child is camera, second child is collision object (in the case of a spaceship):
+                if(other != spaceship.spaceship.children[1]) {
+                    // If the object we're colliding with isn't the object itself:
+                    let tmp = this.resolveCollisionCheckpoint(spaceship, other);
+                    if(tmp){
+                        result = other;
+                    }
+                }
+            }
+
         });
         return result;
     }
