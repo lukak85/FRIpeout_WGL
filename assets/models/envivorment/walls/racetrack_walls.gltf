@@ -69,63 +69,63 @@
         {
             "bufferView" : 0,
             "componentType" : 5126,
-            "count" : 186,
+            "count" : 370,
             "max" : [
-                599.961669921875,
-                6.948525905609131,
-                352.3843078613281
+                626.2186279296875,
+                -1.2992879152297974,
+                365.3866271972656
             ],
             "min" : [
-                -42.18793869018555,
-                -5.454288482666016,
-                -140.92413330078125
+                -57.43048095703125,
+                -7.889193058013916,
+                -147.94888305664062
             ],
             "type" : "VEC3"
         },
         {
             "bufferView" : 1,
             "componentType" : 5126,
-            "count" : 186,
+            "count" : 370,
             "type" : "VEC3"
         },
         {
             "bufferView" : 2,
             "componentType" : 5126,
-            "count" : 186,
+            "count" : 370,
             "type" : "VEC2"
         },
         {
             "bufferView" : 3,
             "componentType" : 5123,
-            "count" : 336,
+            "count" : 672,
             "type" : "SCALAR"
         }
     ],
     "bufferViews" : [
         {
             "buffer" : 0,
-            "byteLength" : 2232,
+            "byteLength" : 4440,
             "byteOffset" : 0
         },
         {
             "buffer" : 0,
-            "byteLength" : 2232,
-            "byteOffset" : 2232
+            "byteLength" : 4440,
+            "byteOffset" : 4440
         },
         {
             "buffer" : 0,
-            "byteLength" : 1488,
-            "byteOffset" : 4464
+            "byteLength" : 2960,
+            "byteOffset" : 8880
         },
         {
             "buffer" : 0,
-            "byteLength" : 672,
-            "byteOffset" : 5952
+            "byteLength" : 1344,
+            "byteOffset" : 11840
         }
     ],
     "buffers" : [
         {
-            "byteLength" : 6624,
+            "byteLength" : 13184,
             "uri" : "racetrack_walls.bin"
         }
     ]
