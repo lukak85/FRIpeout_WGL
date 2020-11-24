@@ -33,7 +33,8 @@ class Application {
         this.start();
 
         this.LightX = 500;
-        this.LightY = 1800;
+        /* this.LightY = 1800; */
+        this.LightY = 20800;
         this.LightZ = 500;
 
         requestAnimationFrame(this._update);
@@ -472,7 +473,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const gui = new dat.GUI();
 
     gui.add(app, 'LightX', -500, 500);
-    gui.add(app, 'LightY', 1500, 3000);
+    gui.add(app, 'LightY', 1500, 130000);
     gui.add(app, 'LightZ', -500, 500);
     gui.add(app, 'enableCamera');
 });
