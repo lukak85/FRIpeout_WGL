@@ -69,10 +69,10 @@
         {
             "bufferView" : 0,
             "componentType" : 5126,
-            "count" : 370,
+            "count" : 378,
             "max" : [
                 626.2186279296875,
-                -1.2992879152297974,
+                1.4761663675308228,
                 365.3866271972656
             ],
             "min" : [
@@ -85,13 +85,13 @@
         {
             "bufferView" : 1,
             "componentType" : 5126,
-            "count" : 370,
+            "count" : 378,
             "type" : "VEC3"
         },
         {
             "bufferView" : 2,
             "componentType" : 5126,
-            "count" : 370,
+            "count" : 378,
             "type" : "VEC2"
         },
         {
@@ -104,28 +104,28 @@
     "bufferViews" : [
         {
             "buffer" : 0,
-            "byteLength" : 4440,
+            "byteLength" : 4536,
             "byteOffset" : 0
         },
         {
             "buffer" : 0,
-            "byteLength" : 4440,
-            "byteOffset" : 4440
+            "byteLength" : 4536,
+            "byteOffset" : 4536
         },
         {
             "buffer" : 0,
-            "byteLength" : 2960,
-            "byteOffset" : 8880
+            "byteLength" : 3024,
+            "byteOffset" : 9072
         },
         {
             "buffer" : 0,
             "byteLength" : 1344,
-            "byteOffset" : 11840
+            "byteOffset" : 12096
         }
     ],
     "buffers" : [
         {
-            "byteLength" : 13184,
+            "byteLength" : 13440,
             "uri" : "racetrack_walls.bin"
         }
     ]

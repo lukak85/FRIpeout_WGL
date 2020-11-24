@@ -135,7 +135,7 @@ class Application {
 
         await this.loader.load('../assets/models/envivorment/buildings/skyscrapers/skyscraper1.gltf');
         let skyscraper1_2 = await this.loader.loadScene(this.loader.defaultScene);
-        skyscraper1_2.nodes.translation = [300,0,500];
+        skyscraper1_2.nodes.translation = [300,-50,500];
         mat4.fromTranslation(skyscraper1_2.nodes[0].matrix, skyscraper1_2.nodes.translation);
         this.scene.addNode(skyscraper1_2.nodes[0]);
 
@@ -147,13 +147,13 @@ class Application {
 
         await this.loader.load('../assets/models/envivorment/buildings/skyscrapers/skyscraper2.gltf');
         let skyscraper2_2 = await this.loader.loadScene(this.loader.defaultScene);
-        skyscraper2_2.nodes.translation = [200,0,-15];
+        skyscraper2_2.nodes.translation = [200,-50,-15];
         mat4.fromTranslation(skyscraper2_2.nodes[0].matrix, skyscraper2_2.nodes.translation);
         this.scene.addNode(skyscraper2_2.nodes[0]);
 
         await this.loader.load('../assets/models/envivorment/buildings/skyscrapers/skyscraper3.gltf');
         let skyscraper3_1 = await this.loader.loadScene(this.loader.defaultScene);
-        skyscraper3_1.nodes.translation = [800,0,-155];
+        skyscraper3_1.nodes.translation = [800,-50,-155];
         mat4.fromTranslation(skyscraper3_1.nodes[0].matrix, skyscraper3_1.nodes.translation);
         this.scene.addNode(skyscraper3_1.nodes[0]);
 

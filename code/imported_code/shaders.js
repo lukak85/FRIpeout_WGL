@@ -88,11 +88,11 @@ void main() {
     // oColor = texture(uTexture, vTexCoord);
     // oColor = vec4(0.0, 0.0, 0.0, 1.0);
 
-    if(isSkybox == 1) {
+    if(isSkybox == 0) {
         oColor = mix(vec4(fogColour, 1.0), oColor, fogVisibility);
     }
-    else {
-        oColor = mix(vec4(fogColour, 1.0), oColor, 0.8);
+    else if(isSkybox == 1) {
+        oColor = mix(vec4(fogColour, 1.0), oColor, 0.5);
     }
 }
 `;

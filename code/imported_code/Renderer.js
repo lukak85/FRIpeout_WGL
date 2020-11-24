@@ -225,9 +225,9 @@ export default class Renderer {
 
         scene.traverse(
             (node) => {
-                gl.uniform1i(program.uniforms.isSkybox, 1);
+                gl.uniform1i(program.uniforms.isSkybox, 0);
                 if (node.parent != null && node.parent instanceof SkyboxObject) {
-                    gl.uniform1i(program.uniforms.isSkybox, 0);
+                    gl.uniform1i(program.uniforms.isSkybox, 1);
                 }
                 matrixStack.push(mat4.clone(matrix));
                 mat4.mul(matrix, matrix, node.matrix);
