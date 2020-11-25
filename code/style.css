@@ -72,6 +72,14 @@ body, html {
     visibility: hidden;
     color:white;
 }
+#fastestLap {
+    position: absolute;
+    top: 50px;
+    width: 100%;
+    font-size: 2em;
+    visibility: visible;
+    color:white;
+}
 
 .krog {
     text-align: right;
