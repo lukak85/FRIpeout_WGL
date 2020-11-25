@@ -12,6 +12,9 @@ import PowerupObject from "./src/PowerupObject.js";
 
 const vec3 = glMatrix.vec3;
 const mat4 = glMatrix.mat4;
+
+let fastestLap = -1.0;
+
 var maxspeed = 0;
 let isPaused = false;
 let lastLocation = [0,0];
@@ -321,6 +324,18 @@ class Application {
         // ---------------------------
         let headlights = new Flashlight();
         this.currentSpaceship.spaceship.addChild(headlights);
+
+        //-----------
+        // Get cookie for fastest lap
+        //-----------
+        fastestLap = document.cookie.match('(^|;) ?' + "fastestLap" + '=([^;]*)(;|$)')
+        if(fastestLap) {
+            fastestLap = fastestLap[2];
+            document.getElementById("fastestLap").innerText = "Hiscore: " + fastestLap + " sekund";
+        }else{
+            fastestLap = -1.0;
+        }
+        console.log(fastestLap)
     }
 
     getSpeed(vector){
@@ -394,17 +409,22 @@ class Application {
                     checkpointsBool[0] = false;
                     checkpointsBool[1] = true;
                     document.getElementById("Checkpoint").style.visibility = "visible";
-                    document.getElementById("Checkpoint").innerText = "Krog koncan, čas: " + Math.round(currentTime * 100) / 100 + " sekund" ;
+                    document.getElementById("Checkpoint").innerText = "Krog koncan, čas: " + Math.round(currentTime * 1000) / 1000 + " sekund" ;
 
                     setTimeout(this.hide,1000);
                     this.addShowlaps(currentTime);
+                    if(currentTime < fastestLap || fastestLap == -1.0 ){
+                        fastestLap = Math.round(currentTime*1000) / 1000;
+                        document.cookie = "fastestLap=" + fastestLap;
+                        document.getElementById("fastestLap").innerText = "Hiscore: " + fastestLap + " sekund";
+                    }
                     currentTime = 0;
                 }
                 if (this.checkIfCheckpointsMatch(a, checkpoints[1]) && checkpointsBool[1]) {
                     checkpointsBool[0] = true;
                     checkpointsBool[1] = false;
                     document.getElementById("Checkpoint").style.visibility = "visible";
-                    document.getElementById("Checkpoint").innerText = "Checkpoint pred ciljem dosežen, " + Math.floor(currentTime* 100) / 100  + " sekund";
+                    document.getElementById("Checkpoint").innerText = "Checkpoint pred ciljem dosežen, " + Math.floor(currentTime* 1000) / 1000  + " sekund";
                     setTimeout(this.hide,1500);
                 }
                 if (this.checkIfCheckpointsMatch(a, powerups[0]) && powerupsBool[0]) {
