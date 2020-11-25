@@ -12,6 +12,7 @@ Currently working:
 * Collision detection (needs some tweaking)
 * Added ship damage system
 * Checkpoint system
+* Powerups
 
 To add/wishlist:
 * Motion blur

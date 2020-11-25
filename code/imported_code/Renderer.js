@@ -1,6 +1,8 @@
 import * as WebGL from './WebGL.js';
 import shaders from './shaders.js';
 import Light from './Light.js';
+
+import Flashlight from './../src/Flashlight.js';
 import SkyboxObject from '../src/SkyboxObject.js';
 
 const mat4 = glMatrix.mat4;
@@ -214,6 +216,7 @@ export default class Renderer {
         gl.uniformMatrix4fv(program.uniforms.uProjection, false, camera.camera.matrix);
 
         let lightCounter = 0;
+        let flashlightCounter = 0;
 
         let fogColour = vec3.create();
         /* fogColour = vec3.fromValues(0.552, 0.980, 1); */
@@ -231,7 +234,7 @@ export default class Renderer {
                 }
                 matrixStack.push(mat4.clone(matrix));
                 mat4.mul(matrix, matrix, node.matrix);
-                if(node.mesh && !(node instanceof Light)) {
+                if(node.mesh && !(node instanceof Light) && !(node instanceof Flashlight)) {
                     gl.uniformMatrix4fv(program.uniforms.uViewModel, false, matrix);
 
                     /* console.log(node.matrix); */
@@ -275,6 +278,37 @@ export default class Renderer {
                     gl.uniform1f(program.uniforms['uShininess[' + lightCounter + ']'], node.shininess);
                     gl.uniform3fv(program.uniforms['uLightAttenuation[' + lightCounter + ']'], node.attenuatuion);
                     lightCounter++;
+                }
+                else if (node instanceof Flashlight) {
+                    let color = vec3.clone(node.ambientColor);
+                    vec3.scale(color, color, 1.0 / 255.0);
+                    gl.uniform3fv(program.uniforms['uhAmbientColor[' + flashlightCounter + ']'], color);
+                    color = vec3.clone(node.diffuseColor);
+                    vec3.scale(color, color, 1.0 / 255.0);
+                    gl.uniform3fv(program.uniforms['uhDiffuseColor[' + flashlightCounter + ']'], color);
+                    color = vec3.clone(node.specularColor);
+                    vec3.scale(color, color, 1.0 / 255.0);
+                    gl.uniform3fv(program.uniforms['uhSpecularColor[' + flashlightCounter + ']'], color);
+
+                    let position = [0,0,0];
+                    let parentMatrix = mat4.create();
+                    mat4.getTranslation(parentMatrix, node.parent.matrix);
+                    mat4.mul(parentMatrix, node.parent.matrix, parentMatrix);
+                    mat4.getTranslation(position, parentMatrix);
+
+                    /* let direction = [0,0,1];
+                    vec3.rotateY(direction, direction, vec3.create(), quat.getAngle(quat.create(), node.parent.rotation)) */
+
+                    gl.uniform3fv(program.uniforms['uhLightPosition[' + flashlightCounter + ']'], position);
+                    gl.uniform1f(program.uniforms['uhShininess[' + flashlightCounter + ']'], node.shininess);
+                    gl.uniform3fv(program.uniforms['uhLightAttenuation[' + flashlightCounter + ']'], node.attenuatuion);
+
+                    gl.uniform3fv(program.uniforms['uhDirection[' + flashlightCounter + ']'], [0,0,-1]);
+
+                    let cutoffAngle = Math.cos(((22.5) * Math.PI) / 180);
+                    gl.uniform1f(program.uniforms['cutoff'], cutoffAngle);
+
+                    flashlightCounter++;
                 }
             },
             (node) => {

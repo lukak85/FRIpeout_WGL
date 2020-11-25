@@ -3,6 +3,7 @@ import Renderer from './imported_code/Renderer.js';
 import SpaceshipCamera from './src/SpaceshipCamera.js';
 import Physics from './src/Physics.js';
 import Light from './imported_code/Light.js'
+import Flashlight from './src/Flashlight.js'
 import CollisionObject from './src/CollisionObject.js';
 import Node from './imported_code/Node.js';
 import CheckpointObject from "./src/CheckpointObject.js";
@@ -315,6 +316,11 @@ class Application {
         this.scene.addNode(midPoint);
         checkpoints.push(midPoint.children[0]);
 
+        // ---------------------------
+        // Add headlights to the ship:
+        // ---------------------------
+        let headlights = new Flashlight();
+        this.currentSpaceship.spaceship.addChild(headlights);
     }
 
     getSpeed(vector){
@@ -331,6 +337,10 @@ class Application {
         if(isPaused){
             this.startTime = Date.now();
             return;
+        }
+
+        if(laps[1] != 0) {
+            this.LightY = 100000;
         }
 
         const t = this.time = Date.now();

@@ -47,6 +47,19 @@ uniform float uShininess[NUMBER_OF_LIGHTS];
 uniform vec3 uLightPosition[NUMBER_OF_LIGHTS];
 uniform vec3 uLightAttenuation[NUMBER_OF_LIGHTS];
 
+const int NUMBER_OF_HEADLIGHTS = 1;
+
+uniform vec3 uhDirection[NUMBER_OF_HEADLIGHTS];
+uniform float cutoff;
+
+uniform vec3 uhAmbientColor[NUMBER_OF_HEADLIGHTS];
+uniform vec3 uhDiffuseColor[NUMBER_OF_HEADLIGHTS];
+uniform vec3 uhSpecularColor[NUMBER_OF_HEADLIGHTS];
+
+uniform float uhShininess[NUMBER_OF_HEADLIGHTS];
+uniform vec3 uhLightPosition[NUMBER_OF_HEADLIGHTS];
+uniform vec3 uhLightAttenuation[NUMBER_OF_HEADLIGHTS];
+
 uniform vec3 fogColour;
 
 uniform int isSkybox;
@@ -83,6 +96,32 @@ void main() {
 
 
         oColor += texture(uTexture, vTexCoord) * vec4(light, 1);
+    }
+
+    for (int i = 0; i < NUMBER_OF_LIGHTS; i++) {
+        vec3 lightPosition = (uViewModel * vec4(uhLightPosition[i], 1)).xyz;
+        vec3 lightDirection = normalize(lightPosition - vVertexPosition);
+        float theta = dot(lightDirection, normalize(-uhDirection[i]));
+        if(theta > cutoff) {
+            float d = distance(vVertexPosition, lightPosition);
+            float attenuation = 1.0 / dot(uhLightAttenuation[i] * vec3(1, d, d * d), vec3(1, 1, 1));
+
+            vec3 N = (uViewModel * vec4(vNormal, 0)).xyz;
+            vec3 L = normalize(lightPosition - vVertexPosition);
+            vec3 E = normalize(-vVertexPosition);
+            vec3 R = normalize(reflect(-L, N));
+
+            float lambert = max(0.0, dot(L, N));
+            float phong = pow(max(0.0, dot(E, R)), uhShininess[i]);
+
+            vec3 ambient = uhAmbientColor[i];
+            vec3 diffuse = uhDiffuseColor[i] * lambert;
+            vec3 specular = uhSpecularColor[i] * phong;
+
+            vec3 light = (ambient + diffuse + specular) * attenuation;
+
+            oColor += vec4(light, 1);
+        }
     }
     // oColor = vec4(light, 1.0);
     // oColor = texture(uTexture, vTexCoord);

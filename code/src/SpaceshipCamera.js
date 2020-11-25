@@ -31,7 +31,7 @@ export default class SpaceshipCamera {
         // --------------------------------------------------------
 
         this.cameraRotation = 0;
-        this.maxCameraAngle = 0.20;
+        this.maxCameraAngle = 0.30;
 
         this.firstLoop = true;
         this.initCameraMatrix = mat4.create();
