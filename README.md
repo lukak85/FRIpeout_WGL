@@ -13,6 +13,7 @@ Currently working:
 * Added ship damage system
 * Checkpoint system
 * Powerups
+* Headlights
 
 To add/wishlist:
 * Motion blur

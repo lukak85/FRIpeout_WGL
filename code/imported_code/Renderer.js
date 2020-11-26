@@ -305,8 +305,11 @@ export default class Renderer {
 
                     gl.uniform3fv(program.uniforms['uhDirection[' + flashlightCounter + ']'], [0,0,-1]);
 
-                    let cutoffAngle = Math.cos(((22.5) * Math.PI) / 180);
+                    let cutoffAngle = Math.cos(((18.5) * Math.PI) / 180);
                     gl.uniform1f(program.uniforms['cutoff'], cutoffAngle);
+
+                    let outerCutoffAngle = Math.cos(((19.5) * Math.PI) / 180);
+                    gl.uniform1f(program.uniforms['outerCutoff'], outerCutoffAngle);
 
                     flashlightCounter++;
                 }

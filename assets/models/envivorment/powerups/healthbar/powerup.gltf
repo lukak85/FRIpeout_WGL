@@ -8,14 +8,44 @@
         {
             "name" : "Scene",
             "nodes" : [
-                0
+                0,
+                1,
+                2
             ]
         }
     ],
     "nodes" : [
         {
             "mesh" : 0,
-            "name" : "Sphere"
+            "name" : "Cube"
+        },
+        {
+            "name" : "Light",
+            "rotation" : [
+                0.16907575726509094,
+                0.7558803558349609,
+                -0.27217137813568115,
+                0.570947527885437
+            ],
+            "translation" : [
+                4.076245307922363,
+                5.903861999511719,
+                -1.0054539442062378
+            ]
+        },
+        {
+            "name" : "Camera",
+            "rotation" : [
+                0.483536034822464,
+                0.33687159419059753,
+                -0.20870360732078552,
+                0.7804827094078064
+            ],
+            "translation" : [
+                7.358891487121582,
+                4.958309173583984,
+                6.925790786743164
+            ]
         }
     ],
     "materials" : [
@@ -26,20 +56,20 @@
                 0,
                 0
             ],
-            "name" : "Material.001",
+            "name" : "Material",
             "pbrMetallicRoughness" : {
                 "baseColorTexture" : {
                     "index" : 0,
                     "texCoord" : 0
                 },
                 "metallicFactor" : 0,
-                "roughnessFactor" : 0.5
+                "roughnessFactor" : 0.4000000059604645
             }
         }
     ],
     "meshes" : [
         {
-            "name" : "Sphere",
+            "name" : "Cube",
             "primitives" : [
                 {
                     "attributes" : {
@@ -69,63 +99,63 @@
         {
             "bufferView" : 0,
             "componentType" : 5126,
-            "count" : 380,
+            "count" : 72,
             "max" : [
-                0.9510567784309387,
-                1,
-                1.0000005960464478
+                1.5,
+                1.5,
+                0.5
             ],
             "min" : [
-                -0.9510567784309387,
-                -1,
-                -0.9999999403953552
+                -1.5,
+                -1.5,
+                -0.5
             ],
             "type" : "VEC3"
         },
         {
             "bufferView" : 1,
             "componentType" : 5126,
-            "count" : 380,
+            "count" : 72,
             "type" : "VEC3"
         },
         {
             "bufferView" : 2,
             "componentType" : 5126,
-            "count" : 380,
+            "count" : 72,
             "type" : "VEC2"
         },
         {
             "bufferView" : 3,
             "componentType" : 5123,
-            "count" : 540,
+            "count" : 132,
             "type" : "SCALAR"
         }
     ],
     "bufferViews" : [
         {
             "buffer" : 0,
-            "byteLength" : 4560,
+            "byteLength" : 864,
             "byteOffset" : 0
         },
         {
             "buffer" : 0,
-            "byteLength" : 4560,
-            "byteOffset" : 4560
+            "byteLength" : 864,
+            "byteOffset" : 864
         },
         {
             "buffer" : 0,
-            "byteLength" : 3040,
-            "byteOffset" : 9120
+            "byteLength" : 576,
+            "byteOffset" : 1728
         },
         {
             "buffer" : 0,
-            "byteLength" : 1080,
-            "byteOffset" : 12160
+            "byteLength" : 264,
+            "byteOffset" : 2304
         }
     ],
     "buffers" : [
         {
-            "byteLength" : 13240,
+            "byteLength" : 2568,
             "uri" : "powerup.bin"
         }
     ]

@@ -10,28 +10,31 @@
     <script type="text/javascript" src="../lib/gl-matrix-min.js"></script>
     <script type="text/javascript" src="../lib/dat.gui.min.js"></script>
     <script type="module" src="main.js"></script>
+
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500&display=swap" rel="stylesheet">
 </head>
 <body>
     <div class="fullscreen">
         <canvas></canvas>
     </div>
     <h5 id="speed"></h5>
-    <h5 id="healthtext">Health:</h5>
-    <div id="healthBar">
+    <div id="healthBar" class="uiTopLeft">
         <div id="health"></div>
     </div>
+     <div id="healthtext" class="uiTopLeft"><img src="./img/health.png" width="25" height="25" style="padding-top: 25px; padding-left: 2px"></div>
     <div id="myProgress">
         <div id="throttle"></div>
     </div>
-    <h5 id="paused">Game is paused.</h5>
-    <h5 id="destroyed">Your ship was destroyed.<br>Refresh to restart.</h5>
+    <h5 id="paused">GAME PAUSED</h5>
+    <h5 id="destroyed">YOUR SHIP WAS DESTROYED<br>REFRESH TO RESTART</h5>
+    <h5 id="finished"></h5>
     <h5 id="time"></h5>
     <h5 id="Checkpoint"></h5>
     <h5 id="Powerup"></h5>
-    <h5 id="fastestLap">Hiscore: </h5>
-    <h6 id="krogi" class="krog" >Zadnji trije krogi</h6>
-    <h6 id="krog1" class="krog">1. : 0 sekund</h6>
-    <h6 id="krog2" class="krog">2. : 0 sekund</h6>
-    <h6 id="krog3" class="krog">3. : 0 sekund</h6>
+    <h5 id="fastestLap" class="uiTopLeft">BEST TIME: </h5>
+    <h6 id="krogi" class="krog">LAST 3 LAPS</h6>
+    <h6 id="krog1" class="krog">1. : 0s</h6>
+    <h6 id="krog2" class="krog">2. : 0s</h6>
+    <h6 id="krog3" class="krog">3. : 0s</h6>
 </body>
 </html>

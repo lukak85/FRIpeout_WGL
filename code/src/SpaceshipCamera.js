@@ -73,11 +73,36 @@ export default class SpaceshipCamera {
         if (this.keys['KeyS']) {
             vec3.sub(acc, acc, forward);
         }
-        if (this.keys['KeyD']) {
+        /* if (this.keys['KeyD']) {
             this.rotate(dt, 1);
         }
         if (this.keys['KeyA']) {
             this.rotate(dt, -1);
+        } */
+
+        if (this.keys['KeyD']) {
+            this.rotate(dt, 1);
+
+            document.getElementById('healthtext').style.paddingLeft = "45px";
+            document.getElementById('healthBar').style.paddingLeft = "45px";
+            document.getElementById('fastestLap').style.paddingLeft = "45px";
+            document.getElementById('speed').style.right = "15px";
+            document.getElementById('krogi').style.paddingLeft = "45px";
+            document.getElementById('krog1').style.paddingLeft = "45px";
+            document.getElementById('krog2').style.paddingLeft = "45px";
+            document.getElementById('krog3').style.paddingLeft = "45px";
+        }
+        if (this.keys['KeyA']) {
+            this.rotate(dt, -1);
+
+            document.getElementById('healthtext').style.paddingLeft = "15px";
+            document.getElementById('healthBar').style.paddingLeft = "15px";
+            document.getElementById('fastestLap').style.paddingLeft = "15px";
+            document.getElementById('speed').style.right = "45px";
+            document.getElementById('krogi').style.paddingLeft = "15px";
+            document.getElementById('krog1').style.paddingLeft = "15px";
+            document.getElementById('krog2').style.paddingLeft = "15px";
+            document.getElementById('krog3').style.paddingLeft = "15px";
         }
 
         // 2: update velocity

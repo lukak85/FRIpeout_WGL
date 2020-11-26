@@ -113,7 +113,8 @@ class Application {
         this.camera = this.currentSpaceship.spaceship.children[0];
 
         // Create another spaceship:
-        await this.loader.load('../assets/models/ships/2_spaceship/fripeout_ship_2.gltf');
+        let randomSpaceship = Math.floor(Math.random() * 3) + 1;
+        await this.loader.load('../assets/models/ships/' + randomSpaceship + '_spaceship/fripeout_ship_' + randomSpaceship + '.gltf');
         let spaceship = await this.loader.loadScene(this.loader.defaultScene);
         let spaceshipMove = spaceship.nodes[1].translation;
         spaceshipMove[0] = -15;
@@ -331,7 +332,7 @@ class Application {
         fastestLap = document.cookie.match('(^|;) ?' + "fastestLap" + '=([^;]*)(;|$)')
         if(fastestLap) {
             fastestLap = fastestLap[2];
-            document.getElementById("fastestLap").innerText = "Hiscore: " + fastestLap + " sekund";
+            document.getElementById("fastestLap").innerText = "BEST TIME: " + fastestLap + "s";
         }else{
             fastestLap = -1.0;
         }
@@ -354,7 +355,7 @@ class Application {
             return;
         }
 
-        if(laps[1] != 0) {
+        if(laps[2] != 0 && laps[3] == 0) {
             this.LightY = 100000;
         }
 
@@ -364,7 +365,7 @@ class Application {
 
 
 
-        document.getElementById('time').innerText = "Current time: " + Math.floor(currentTime/60) + " min " + Math.floor(currentTime%60) + " sec.";
+        document.getElementById('time').innerText ="TIME: " + currentTime.toFixed(3);
         if(this.loaded) {
             this.currentSpaceship.update(dt);
             if(this.currentSpaceship.started){
@@ -376,7 +377,7 @@ class Application {
             if(frame % 6 == 0){
                 spaceshipSpeed = Math.round( this.calculateSpeed(lastLocation,tmpLoc,dt ));
             }
-            document.getElementById('speed').innerText = "Current speed: " + spaceshipSpeed + " u/s";
+            document.getElementById('speed').innerText = "SPEED: " + spaceshipSpeed + "u/s";
             lastLocation = tmpLoc;
 
             //Speed bar
@@ -384,14 +385,24 @@ class Application {
             /* var speed = this.getSpeed(this.currentSpaceship.velocity); */
             var speed = spaceshipSpeed;
 
-            if (speed > maxspeed)
-                maxspeed = speed;
-
-            throttle.style.width = speed*(100/maxspeed) + "%";
+            if(speed>maxspeed)
+                throttle.style.width = "100%";
+            else
+                throttle.style.width = speed*(100/maxspeed) + "%";
 
             if(this.physics) {
                 //Health bar
                 var varhealth = shipHealth - this.physics.shipDamage;
+
+                if(((varhealth / shipHealth) * 100) < 66 && ((varhealth / shipHealth) * 100) >=33)
+                    document.getElementById('health').style.backgroundColor="#6e6e17";
+
+                if(((varhealth / shipHealth) * 100) < 33)
+                    document.getElementById('health').style.backgroundColor="#6e1717";
+
+                if(((varhealth / shipHealth) * 100) >= 66)
+                    document.getElementById('health').style.backgroundColor="#176d2c";
+
                 document.getElementById('health').style.width = ((varhealth / shipHealth) * 100) + "%";
             }
 
@@ -409,14 +420,14 @@ class Application {
                     checkpointsBool[0] = false;
                     checkpointsBool[1] = true;
                     document.getElementById("Checkpoint").style.visibility = "visible";
-                    document.getElementById("Checkpoint").innerText = "Krog koncan, čas: " + Math.round(currentTime * 1000) / 1000 + " sekund" ;
+                    document.getElementById("Checkpoint").innerText = "LAP TIME: " + Math.round(currentTime * 1000) / 1000 + "s";
 
                     setTimeout(this.hide,1000);
                     this.addShowlaps(currentTime);
                     if(currentTime < fastestLap || fastestLap == -1.0 ){
                         fastestLap = Math.round(currentTime*1000) / 1000;
                         document.cookie = "fastestLap=" + fastestLap;
-                        document.getElementById("fastestLap").innerText = "Hiscore: " + fastestLap + " sekund";
+                        document.getElementById("fastestLap").innerText = "BEST TIME: " + fastestLap + "s";
                     }
                     currentTime = 0;
                 }
@@ -424,25 +435,29 @@ class Application {
                     checkpointsBool[0] = true;
                     checkpointsBool[1] = false;
                     document.getElementById("Checkpoint").style.visibility = "visible";
-                    document.getElementById("Checkpoint").innerText = "Checkpoint pred ciljem dosežen, " + Math.floor(currentTime* 1000) / 1000  + " sekund";
+                    document.getElementById("Checkpoint").innerText = "CHECKPOINT: " + Math.floor(currentTime* 1000) / 1000  + "s";
                     setTimeout(this.hide,1500);
                 }
                 if (this.checkIfCheckpointsMatch(a, powerups[0]) && powerupsBool[0]) {
                     document.getElementById("Powerup").style.visibility = "visible";
-                    document.getElementById("Powerup").innerText = "Health Restored 100%";
+                    document.getElementById("Powerup").innerText = "HEALTH RESTORED TO 100%";
+                    document.getElementById("Powerup").style.paddingLeft="0px";
                     this.physics.shipDamage = 0;
                     setTimeout(()=> document.getElementById("Powerup").style.visibility = "hidden" ,1000);
+                    setTimeout(()=> document.getElementById("Powerup").style.paddingLeft="80px" ,2000);
                     powerupsBool[0] = false;
                     setTimeout(() => powerupsBool[0] = true, 2000)
                     this.najdPowerup(a);
                 }
                 if (this.checkIfCheckpointsMatch(a, powerups[1]) && powerupsBool[1]) {
                     document.getElementById("Powerup").style.visibility = "visible";
-                    document.getElementById("Powerup").innerText = "Speed boost active";
+                    document.getElementById("Powerup").innerText = "SPEED BOOST ACTIVATED";
+                    document.getElementById("Powerup").style.paddingLeft="0px";
                     this.currentSpaceship.acceleration = 100;
                     setTimeout(()=> this.currentSpaceship.acceleration = 50 ,500);
                     shipHealth = 100;
                     setTimeout(()=> document.getElementById("Powerup").style.visibility = "hidden" ,2000);
+                    setTimeout(()=> document.getElementById("Powerup").style.paddingLeft="80px" ,3000);
                     powerupsBool[0] = false;
                     setTimeout(() => powerupsBool[0] = true, 2000)
                     this.najdPowerup(a);
@@ -463,6 +478,15 @@ class Application {
                 shipIsDestroyed = true;
                 document.getElementById('destroyed').style.visibility = "visible";
             }
+            if(laps.length >= 5 && laps[4] != 0) {
+                isPaused = true;
+                document.getElementById('finished').style.visibility = "visible";
+                let skupniCas = 0;
+                for(let i = 0; i < 5; i++) {
+                    skupniCas += laps[i];
+                }
+                document.getElementById('finished').innerText = "You win. Final time: " +  Math.round(skupniCas * 100) / 100;
+            }
         }
 
         if(this.skybox) {
@@ -475,9 +499,9 @@ class Application {
 
     addShowlaps(ct) {
         laps.unshift(ct);
-        document.getElementById("krog1").innerText = "1. : " + Math.floor(laps[0] * 100) / 100 + " sekund";
-        document.getElementById("krog2").innerText = "2. : " + Math.floor(laps[1] * 100) / 100 + " sekund" ;
-        document.getElementById("krog3").innerText = "3. : " + Math.floor(laps[2] * 100) / 100 + " sekund";
+        document.getElementById("krog1").innerText = "1. : " + Math.floor(laps[0] * 100) / 100 + "s";
+        document.getElementById("krog2").innerText = "2. : " + Math.floor(laps[1] * 100) / 100 + "s";
+        document.getElementById("krog3").innerText = "3. : " + Math.floor(laps[2] * 100) / 100 + "s";
     }
 
     hide(){
@@ -635,6 +659,9 @@ document.onkeydown = function(e) {
         case 'Escape':
             //Function call /TODO
             if(!shipIsDestroyed) {
+                if(laps.length >=5 && laps[4] != 0) {
+                    return;
+                }
                 Application.pause();
                 document.getElementById('paused').style.visibility = isPaused ? "visible" : "hidden";
                 break;

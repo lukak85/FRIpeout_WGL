@@ -51,6 +51,7 @@ const int NUMBER_OF_HEADLIGHTS = 1;
 
 uniform vec3 uhDirection[NUMBER_OF_HEADLIGHTS];
 uniform float cutoff;
+uniform float outerCutoff;
 
 uniform vec3 uhAmbientColor[NUMBER_OF_HEADLIGHTS];
 uniform vec3 uhDiffuseColor[NUMBER_OF_HEADLIGHTS];
@@ -98,11 +99,16 @@ void main() {
         oColor += texture(uTexture, vTexCoord) * vec4(light, 1);
     }
 
-    for (int i = 0; i < NUMBER_OF_LIGHTS; i++) {
+    for (int i = 0; i < NUMBER_OF_HEADLIGHTS; i++) {
         vec3 lightPosition = (uViewModel * vec4(uhLightPosition[i], 1)).xyz;
         vec3 lightDirection = normalize(lightPosition - vVertexPosition);
+        
         float theta = dot(lightDirection, normalize(-uhDirection[i]));
-        if(theta > cutoff) {
+
+        float epsilon = cutoff - outerCutoff;
+        float intensity = clamp((theta - outerCutoff)/epsilon,0.0,1.0);
+
+        if(theta > outerCutoff) {
             float d = distance(vVertexPosition, lightPosition);
             float attenuation = 1.0 / dot(uhLightAttenuation[i] * vec3(1, d, d * d), vec3(1, 1, 1));
 
@@ -118,9 +124,13 @@ void main() {
             vec3 diffuse = uhDiffuseColor[i] * lambert;
             vec3 specular = uhSpecularColor[i] * phong;
 
+            diffuse *= intensity;
+            specular *= intensity;
+
             vec3 light = (ambient + diffuse + specular) * attenuation;
 
-            oColor += vec4(light, 1);
+            // oColor += vec4(light, 1);
+            oColor += texture(uTexture, vTexCoord) * vec4(light, 1);
         }
     }
     // oColor = vec4(light, 1.0);

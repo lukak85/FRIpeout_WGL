@@ -235,6 +235,16 @@ var vehicleSelection = false;
 
 document.addEventListener('keydown', (e) => {
     console.log(e.key);
+    if(e.key == "i") {
+        console.log(document.getElementById('information').style.visibility);
+        if(document.getElementById('information').style.visibility == "hidden" || !document.getElementById('information').style.visibility) {
+            document.getElementById('information').style.visibility = "visible";
+        }
+        else {
+            document.getElementById('information').style.visibility = "hidden";
+        }
+        return;
+    }
     if(e.key == "Enter") {
         if(vehicleSelection == true) {
             window.location.href = "./game.html" + '#' + currentApp.currentSpaceshipIndex;

@@ -10,10 +10,24 @@
     <script type="text/javascript" src="../lib/gl-matrix-min.js"></script>
     <script type="text/javascript" src="../lib/dat.gui.min.js"></script>
     <script type="module" src="main_menu/main_menu.js"></script>
+
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500&display=swap" rel="stylesheet">
 </head>
 <body>
     <div class="fullscreen">
         <canvas></canvas>
+    </div>
+    <h3 id="info">Press i for info.</h3>
+    <div id="information">
+        <ul>
+            <li>"wasd": movement</li>
+            <li>Complete 5 laps to win.</li>
+            <li>Avoid crashing the ship.</li>
+            <li>Powerups may help you win.</li>
+            <li>A blackout occurs at lap 4.</li>
+            <li>Avoid enemy vehicle.</li>
+            <li>Press p to pause the game.</li>
+        </ul>
     </div>
     <h3 id="vehicleselect">Select a vehicle (directional buttons):</h3>
     <h3 id="keypress">Press any key to continue.</h3>
