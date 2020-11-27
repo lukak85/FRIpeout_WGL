@@ -1,5 +1,5 @@
 # FRIpeout
-Fripeut WebGL version 0.6.
+Fripeut WebGL version 1.0.
 
 Currently working:
 * Object spawning

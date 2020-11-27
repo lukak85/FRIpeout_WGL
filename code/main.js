@@ -9,7 +9,6 @@ import Node from './imported_code/Node.js';
 import CheckpointObject from "./src/CheckpointObject.js";
 import SkyboxObject from './src/SkyboxObject.js';
 import PowerupObject from "./src/PowerupObject.js";
-import Camera from './imported_code/Camera.js';
 import PerspectiveCamera from './imported_code/PerspectiveCamera.js';
 
 const vec3 = glMatrix.vec3;
@@ -17,7 +16,7 @@ const mat4 = glMatrix.mat4;
 
 let fastestLap = -1.0;
 
-var maxspeed = 0;
+var maxspeed = 200;
 let isPaused = false;
 let lastLocation = [0,0];
 let frame = 0;
@@ -108,6 +107,7 @@ class Application {
         this.currentSpaceship.spaceship = await this.loader.loadNode('Spaceship');
         var camera = await this.loader.loadNode('Camera');
         this.currentSpaceship.spaceship.addChild(camera);
+        this.loaded = true;
 
         // Camera is a part of spaceship-camera object, but can be reffered to 
         // in either way from now on:
@@ -328,9 +328,9 @@ class Application {
         let headlights = new Flashlight();
         this.currentSpaceship.spaceship.addChild(headlights);
 
-        //----------------------------
-        // Get cookie for fastest lap:
-        //----------------------------
+        //-----------
+        // Get cookie for fastest lap
+        //-----------
         fastestLap = document.cookie.match('(^|;) ?' + "fastestLap" + '=([^;]*)(;|$)')
         if(fastestLap) {
             fastestLap = fastestLap[2];
@@ -399,14 +399,13 @@ class Application {
             lastLocation = tmpLoc;
 
             //Speed bar
-            var bar = document.getElementById('myBar');
             /* var speed = this.getSpeed(this.currentSpaceship.velocity); */
             var speed = spaceshipSpeed;
 
             if(speed>maxspeed)
-                throttle.style.width = "100%";
+                document.getElementById('throttle').style.width = "100%";
             else
-                throttle.style.width = speed*(100/maxspeed) + "%";
+                document.getElementById('throttle').style.width = speed*(100/maxspeed) + "%";
 
             if(this.physics) {
                 //Health bar
@@ -503,7 +502,7 @@ class Application {
                 for(let i = 0; i < 5; i++) {
                     skupniCas += laps[i];
                 }
-                document.getElementById('finished').innerText = "You win. Final time: " +  Math.round(skupniCas * 100) / 100;
+                document.getElementById('finished').innerText = "FINISHED IN TIME: " +  Math.round(skupniCas * 100) / 100;
             }
         }
 
@@ -650,7 +649,6 @@ document.addEventListener('DOMContentLoaded', () => {
     gui.add(app, 'LightZ', -500, 500);
     gui.add(app, 'enableCamera');
 });
-
 
 //Keys detect
 document.onkeydown = function(e) {
