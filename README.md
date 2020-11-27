@@ -5,11 +5,11 @@ Currently working:
 * Object spawning
 * Basic driving mechanics
 * Basic lighting
-* Fog (although it needs some tweaking)
+* Fog
 * Non-static camera attached to the object (delayed movement to behind the player)
 * Menu with vehicle selection
 * Sound effects
-* Collision detection (needs some tweaking)
+* Collision detection (not perfect though)
 * Added ship damage system
 * Checkpoint system
 * Powerups
