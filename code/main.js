@@ -9,6 +9,8 @@ import Node from './imported_code/Node.js';
 import CheckpointObject from "./src/CheckpointObject.js";
 import SkyboxObject from './src/SkyboxObject.js';
 import PowerupObject from "./src/PowerupObject.js";
+import Camera from './imported_code/Camera.js';
+import PerspectiveCamera from './imported_code/PerspectiveCamera.js';
 
 const vec3 = glMatrix.vec3;
 const mat4 = glMatrix.mat4;
@@ -106,14 +108,14 @@ class Application {
         this.currentSpaceship.spaceship = await this.loader.loadNode('Spaceship');
         var camera = await this.loader.loadNode('Camera');
         this.currentSpaceship.spaceship.addChild(camera);
-        this.loaded = true;
 
         // Camera is a part of spaceship-camera object, but can be reffered to 
         // in either way from now on:
         this.camera = this.currentSpaceship.spaceship.children[0];
+        this.primaryCamera = this.currentSpaceship.spaceship.children[0];
 
         // Create another spaceship:
-        let randomSpaceship = Math.floor(Math.random() * 3) + 1;
+        /* let randomSpaceship = Math.floor(Math.random() * 3) + 1;
         await this.loader.load('../assets/models/ships/' + randomSpaceship + '_spaceship/fripeout_ship_' + randomSpaceship + '.gltf');
         let spaceship = await this.loader.loadScene(this.loader.defaultScene);
         let spaceshipMove = spaceship.nodes[1].translation;
@@ -121,7 +123,7 @@ class Application {
         mat4.fromTranslation(spaceship.nodes[1].matrix, spaceshipMove);
         this.scene.addNode(spaceship.nodes[1]);
 
-        this.scene.nodes[2].translation[2] = 10;
+        this.scene.nodes[2].translation[2] = 10; */
 
         // Creation of racetrack:
         await this.loader.load('../assets/models/envivorment/racetrack/2/race_track_2.gltf');
@@ -256,8 +258,8 @@ class Application {
         this.physics = new Physics(this.scene);
 
         this.currentSpaceship.spaceship = this.addCollisionCube(this.currentSpaceship.spaceship,15,10,15);
-        let secondSpaceship = this.scene.nodes[2];
-        secondSpaceship = this.addCollisionCube(secondSpaceship,10,10,10);
+        /* let secondSpaceship = this.scene.nodes[2];
+        secondSpaceship = this.addCollisionCube(secondSpaceship,10,10,10); */
         /* console.log(this.currentSpaceship.spaceship); */
 
         let testCube = new Node();
@@ -326,9 +328,9 @@ class Application {
         let headlights = new Flashlight();
         this.currentSpaceship.spaceship.addChild(headlights);
 
-        //-----------
-        // Get cookie for fastest lap
-        //-----------
+        //----------------------------
+        // Get cookie for fastest lap:
+        //----------------------------
         fastestLap = document.cookie.match('(^|;) ?' + "fastestLap" + '=([^;]*)(;|$)')
         if(fastestLap) {
             fastestLap = fastestLap[2];
@@ -336,7 +338,23 @@ class Application {
         }else{
             fastestLap = -1.0;
         }
-        console.log(fastestLap)
+        console.log(fastestLap);
+
+        // -------------------------------------------
+        // Create a second camera for 1st person view:
+        // -------------------------------------------
+        let myCam = new PerspectiveCamera();
+        let secondCamera = new Node();
+        secondCamera.camera = myCam;
+        secondCamera.translation = [0, 0, -5];
+        mat4.fromTranslation(secondCamera.matrix, secondCamera.translation);
+        this.currentSpaceship.spaceship.addChild(secondCamera);
+
+        console.log(this.currentSpaceship.spaceship);
+
+        this.secondaryCamera = this.currentSpaceship.spaceship.children[3];
+
+        this.loaded = true;
     }
 
     getSpeed(vector){
@@ -602,14 +620,30 @@ class Application {
         }
     }
 
+    changeCamera() {
+        console.log(this.camera);
+        console.log("tst");
+        if(this.camera == this.primaryCamera) {
+            this.camera = this.secondaryCamera;
+        }
+        else {
+            this.camera = this.primaryCamera;
+        }
+        console.log(this.camera);
+        console.log(this.primaryCamera);
+        console.log(this.secondaryCamera);
+    }
+
 }
 
-
+let currentApp;
 
 document.addEventListener('DOMContentLoaded', () => {
     const canvas = document.querySelector('canvas');
     const app = new Application(canvas);
     const gui = new dat.GUI();
+
+    currentApp = app;
 
     gui.add(app, 'LightX', -500, 500);
     gui.add(app, 'LightY', 1500, 130000);
@@ -621,40 +655,14 @@ document.addEventListener('DOMContentLoaded', () => {
 //Keys detect
 document.onkeydown = function(e) {
     switch (e.key) { 
-        //Right shift key -special ability (optional)
-        case 16:
-            //Function call /TODO
-            break;
-
-        //Space key -handbrake (optional)
-        case 32:
-            //Function call /TODO
-            break;
-
-        //Left arrow key -steerleft
-        case 37: 
-            //Function call /TODO
-            break; 
-
-        //Up arrow key -gas
-        case 38: 
-            //Function call /TODO 
-            break; 
-
-        //Right arrow key -steer right
-        case 39: 
-            //Function call /TODO
-            break; 
-
-        //Down arrow key -break
-        case 40: 
-            //Function call /TODO
-            break; 
-
-        //N key -nitrous 
-        case 78:
-            //Function call /TODO
-            break;
+        case 'c':
+            if(!shipIsDestroyed) {
+                if(laps.length >=5 && laps[4] != 0) {
+                    return;
+                }
+                currentApp.changeCamera();
+                break;
+            }
         case 'p':
         case 'Escape':
             //Function call /TODO

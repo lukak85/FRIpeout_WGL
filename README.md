@@ -14,7 +14,4 @@ Currently working:
 * Checkpoint system
 * Powerups
 * Headlights
-
-To add/wishlist:
-* Motion blur
-* Music
+* Camera modes
